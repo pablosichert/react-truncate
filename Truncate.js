@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 
 export default class Truncate extends Component {
     static propTypes = {
-        children: React.PropTypes.string,
-        truncate: React.PropTypes.string,
+        children: React.PropTypes.node,
+        ellipsis: React.PropTypes.node,
         lines: React.PropTypes.number
     };
 
     static defaultProps = {
         children: '',
-        truncate: '…',
+        ellipsis: '…',
         lines: 1
     };
 
@@ -27,7 +27,15 @@ export default class Truncate extends Component {
     }
 
     onResize = () => {
+        this.refs.target.style.display = 'inline-block';
+        this.refs.target.style.width = '100%';
+
         let style = window.getComputedStyle(this.refs.target);
+        let targetWidth = this.refs.target.clientWidth;
+
+        this.refs.target.style.display = null;
+        this.refs.target.style.width = null;
+
         let font = [
             style['font-weight'],
             style['font-style'],
@@ -38,7 +46,7 @@ export default class Truncate extends Component {
         this.canvas.font = font;
 
         this.setState({
-            targetWidth: style.width.split('px')[0]
+            targetWidth
         });
     };
 
@@ -48,10 +56,17 @@ export default class Truncate extends Component {
 
     getLines() {
         let {
+            refs: {
+                text: {
+                    textContent: text
+                },
+                ellipsis: {
+                    textContent: ellipsisText
+                }
+            },
             props: {
-                children: textSource,
                 lines: numLines,
-                truncate: truncateString
+                ellipsis
             },
             state: {
                 targetWidth
@@ -60,7 +75,7 @@ export default class Truncate extends Component {
         } = this;
 
         let lines = [];
-        let textWords = textSource.split(' ');
+        let textWords = text.split(' ');
 
         for (let line = 1; line <= numLines; line++) {
             let resultLine = textWords.join(' ');
@@ -83,10 +98,10 @@ export default class Truncate extends Component {
                 while (lower <= upper) {
                     let middle = Math.floor((lower + upper) / 2);
 
-                    testLine = textRest.slice(0, middle) + truncateString;
+                    testLine = textRest.slice(0, middle);
 
-                    if (measureWidth(testLine) <= targetWidth) {
-                        resultLine = testLine;
+                    if (measureWidth(testLine + ellipsisText) <= targetWidth) {
+                        resultLine = <span>{testLine}{ellipsis}</span>;
 
                         lower = middle + 1;
                     } else {
@@ -125,16 +140,16 @@ export default class Truncate extends Component {
         return lines;
     }
 
-    renderLine(line, i, arr) {
+    renderLine = (line, i, arr) => {
         if (i === arr.length - 1) {
-            return <span key={i}>{line}</span>;
+            return <span key={i} style={this.styles.line}>{line}</span>;
         } else {
             return [
-                <span key={i}>{line}</span>,
+                <span key={i} style={this.styles.line}>{line}</span>,
                 <br key={i + 'br'} />
             ];
         }
-    }
+    };
 
     render() {
         let {
@@ -143,18 +158,39 @@ export default class Truncate extends Component {
             },
             props,
             props: {
-                children: lines
+                children,
+                ellipsis
             }
         } = this;
 
+        let text = children;
+
         if (target) {
-            lines = this.getLines().map(this.renderLine);
+            text = this.getLines().map(this.renderLine);
         }
 
         return (
-            <div {...props} ref='target'>
-                {lines}
-            </div>
+            <span {...props} ref='target'>
+                {text}
+                <span style={this.styles.raw}>
+                    <span ref='text'>{children}</span>
+                    <span ref='ellipsis'>{ellipsis}</span>
+                </span>
+            </span>
         );
     }
+
+    styles = {
+        raw: {
+            position: 'absolute',
+            visibility: 'hidden',
+            pointerEvents: 'none',
+            width: 0,
+            height: 0,
+            overflow: 'hidden'
+        },
+        line: {
+            whiteSpace: 'nowrap'
+        }
+    };
 };
