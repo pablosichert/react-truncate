@@ -9,7 +9,7 @@ export default class Truncate extends Component {
 
     static defaultProps = {
         children: '',
-        ellipsis: '…',
+        ellipsis: '…'
         lines: 1
     };
 
@@ -159,13 +159,14 @@ export default class Truncate extends Component {
             props,
             props: {
                 children,
-                ellipsis
+                ellipsis,
+                lines
             }
         } = this;
 
         let text = children;
 
-        if (target) {
+        if (target && lines > 0) {
             text = this.getLines().map(this.renderLine);
         }
 
