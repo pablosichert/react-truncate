@@ -46,7 +46,7 @@ export default class Truncate extends Component {
         return this.canvas.measureText(text).width;
     };
 
-    getTextTruncated() {
+    getLines() {
         let {
             props: {
                 children: textSource,
@@ -59,56 +59,56 @@ export default class Truncate extends Component {
             measureWidth
         } = this;
 
-        let textRest = textSource;
-        let textTruncated = '';
+        let lines = [];
+        let textWords = textSource.split(' ');
 
         for (let line = 1; line <= numLines; line++) {
-            let textLine;
+            let resultLine = textWords.join(' ');
 
-            if (measureWidth(textRest) < targetWidth) {
+            if (measureWidth(resultLine) < targetWidth) {
                 // Line is end of text and fits without truncating //
-                textTruncated += textRest;
+                lines.push(resultLine);
                 break;
             }
 
             if (line === numLines) {
                 // Binary search determining the longest possible line inluding truncate string //
+                let textRest = textWords.join(' ');
+
                 let lower = 0;
                 let upper = textRest.length - 1;
-                let result;
+
+                let testLine;
 
                 while (lower <= upper) {
                     let middle = Math.floor((lower + upper) / 2);
 
-                    textLine = textRest.slice(0, middle) + truncateString;
-                    let textWidth = measureWidth(textLine);
+                    testLine = textRest.slice(0, middle) + truncateString;
 
-                    if (textWidth <= targetWidth) {
-                        result = textLine;
+                    if (measureWidth(testLine) <= targetWidth) {
+                        resultLine = testLine;
 
                         lower = middle + 1;
                     } else {
                         upper = middle - 1;
                     }
                 }
-
-                textLine = result;
             } else {
                 // Binary search determining when the line breaks //
-                let words = textRest.split(' ');
-
                 let lower = 0;
-                let upper = words.length - 1;
-                let result;
+                let upper = textWords.length - 1;
+
+                let testLine;
+                let resultMiddle;
 
                 while (lower <= upper) {
                     let middle = Math.floor((lower + upper) / 2);
 
-                    textLine = words.slice(0, middle).join(' ');
-                    let textWidth = measureWidth(textLine);
+                    testLine = textWords.slice(0, middle).join(' ');
 
-                    if (textWidth <= targetWidth) {
-                        result = textLine + ' ';
+                    if (measureWidth(testLine) <= targetWidth) {
+                        resultLine = testLine;
+                        resultMiddle = middle;
 
                         lower = middle + 1;
                     } else {
@@ -116,14 +116,24 @@ export default class Truncate extends Component {
                     }
                 }
 
-                textLine = result;
+                textWords = textWords.slice(resultMiddle, textWords.length);
             }
 
-            textTruncated += textLine;
-            textRest = textRest.slice(textLine.length, textRest.length);
+            lines.push(resultLine);
         }
 
-        return textTruncated;
+        return lines;
+    }
+
+    renderLine(line, i, arr) {
+        if (i === arr.length - 1) {
+            return <span key={i}>{line}</span>;
+        } else {
+            return [
+                <span key={i}>{line}</span>,
+                <br key={i + 'br'} />
+            ];
+        }
     }
 
     render() {
@@ -133,17 +143,17 @@ export default class Truncate extends Component {
             },
             props,
             props: {
-                children: text
+                children: lines
             }
         } = this;
 
         if (target) {
-            text = this.getTextTruncated();
+            lines = this.getLines().map(this.renderLine);
         }
 
         return (
             <div {...props} ref='target'>
-                {text}
+                {lines}
             </div>
         );
     }
