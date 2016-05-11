@@ -9,7 +9,7 @@ export default class Truncate extends Component {
 
     static defaultProps = {
         children: '',
-        ellipsis: '…'
+        ellipsis: '…',
         lines: 1
     };
 
