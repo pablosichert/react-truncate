@@ -33,6 +33,17 @@ export default class Truncate extends Component {
     };
 
     calcTargetWidth = () => {
+        // Calculation is no longer relevant, since node has been removed
+        if (!this.refs.target) {
+            return;
+        }
+
+        // Delay calculation until parent node is inserted to the document
+        // Mounting order in React is ChildComponent, ParentComponent
+        if (!this.refs.target.parentNode.getBoundingClientRect().width) {
+            return requestAnimationFrame(this.calcTargetWidth);
+        }
+
         this.refs.target.style.display = 'inline-block';
         this.refs.target.style.width = '100%';
         this.refs.target.style.whiteSpace = null;
