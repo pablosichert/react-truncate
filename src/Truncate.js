@@ -27,14 +27,22 @@ export default class Truncate extends Component {
     }
 
     onResize = () => {
+        this.setState({
+            targetWidth: null
+        }, this.calcTargetWidth);
+    };
+
+    calcTargetWidth = () => {
         this.refs.target.style.display = 'inline-block';
         this.refs.target.style.width = '100%';
+        this.refs.target.style.whiteSpace = null;
 
         let style = window.getComputedStyle(this.refs.target);
         let targetWidth = this.refs.target.clientWidth;
 
         this.refs.target.style.display = null;
         this.refs.target.style.width = null;
+        this.refs.target.style.whiteSpace = 'nowrap';
 
         let font = [
             style['font-weight'],
@@ -142,10 +150,10 @@ export default class Truncate extends Component {
 
     renderLine = (line, i, arr) => {
         if (i === arr.length - 1) {
-            return <span key={i} style={this.styles.line}>{line}</span>;
+            return <span key={i}>{line}</span>;
         } else {
             return [
-                <span key={i} style={this.styles.line}>{line}</span>,
+                <span key={i}>{line}</span>,
                 <br key={i + 'br'} />
             ];
         }
@@ -189,9 +197,6 @@ export default class Truncate extends Component {
             width: 0,
             height: 0,
             overflow: 'hidden'
-        },
-        line: {
-            whiteSpace: 'nowrap'
         }
     };
 };
