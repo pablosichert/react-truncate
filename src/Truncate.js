@@ -202,12 +202,7 @@ export default class Truncate extends Component {
 
     styles = {
         raw: {
-            position: 'absolute',
-            visibility: 'hidden',
-            pointerEvents: 'none',
-            width: 0,
-            height: 0,
-            overflow: 'hidden'
+            display: 'none'
         }
     };
 };
