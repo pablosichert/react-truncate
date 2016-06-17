@@ -30,3 +30,55 @@ class Foo extends Component {
 
 ## Known issues
 - Text exceeding horizontal boundaries when "viewport" meta tag is not set accordingly for mobile devices (font boosting leads to wrong calculations). See [issue](https://github.com/One-com/react-truncate/issues/4#issuecomment-226703499)
+
+## Integrated example for toggling "read more" text
+```js
+import React, { Component, PropTypes } from 'react';
+import Truncate from 'react-truncate';
+
+class ReadMore extends Component {
+    constructor(...args) {
+        super(...args);
+
+        this.state = {};
+
+        this.toggleLines = this.toggleLines.bind(this);
+    }
+
+    toggleLines(event) {
+        event.preventDefault();
+
+        this.setState({
+            readMore: !this.state.readMore
+        });
+    }
+
+    render() {
+        let { children, text, lines } = this.props;
+
+        return (
+            <Truncate
+                lines={this.state.readMore ? 0 : lines}
+                ellipsis={(
+                   <span>... <a href='#' onClick={this.toggleLines}>{text}</a></span>
+                )}
+            >
+                {children}
+            </Truncate>
+        );
+    }
+}
+
+ReadMore.defaultProps = {
+    lines: 3,
+    text: 'Read more'
+};
+
+ReadMore.propTypes = {
+    children: PropTypes.node.isRequired,
+    text: PropTypes.node,
+    lines: PropTypes.number
+};
+
+export default ReadMore;
+```
