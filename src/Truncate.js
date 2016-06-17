@@ -73,6 +73,12 @@ export default class Truncate extends Component {
         return this.canvas.measureText(text).width;
     };
 
+    resetTargetStyle = () => {
+        this.refs.target.style.display = null;
+        this.refs.target.style.width = null;
+        this.refs.target.style.whiteSpace = null;
+    };
+
     getLines() {
         let {
             refs: {
@@ -185,8 +191,12 @@ export default class Truncate extends Component {
 
         let text = children;
 
-        if (target && lines > 0) {
-            text = this.getLines().map(this.renderLine);
+        if (target) {
+            if (lines > 0) {
+                text = this.getLines().map(this.renderLine);
+            } else {
+                this.resetTargetStyle();
+            }
         }
 
         return (
