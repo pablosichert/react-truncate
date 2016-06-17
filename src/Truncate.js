@@ -1,10 +1,13 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 
 export default class Truncate extends Component {
     static propTypes = {
-        children: React.PropTypes.node,
-        ellipsis: React.PropTypes.node,
-        lines: React.PropTypes.number
+        children: PropTypes.node,
+        ellipsis: PropTypes.node,
+        lines: PropTypes.oneOfType([
+            PropTypes.oneOf([false]),
+            PropTypes.number
+        ])
     };
 
     static defaultProps = {
