@@ -3,6 +3,9 @@
   "version": "1.0.3",
   "description": "React component for truncating multi-line spans and adding an ellipsis",
   "main": "lib/Truncate.js",
+  "files": [
+      "lib"
+  ],
   "scripts": {
     "compile": "babel ./src --out-dir ./lib",
     "prepublish": "npm run compile"
