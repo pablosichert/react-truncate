@@ -23,6 +23,9 @@
   ],
   "author": "Pablo Sichert <kps@one.com>",
   "license": "ISC",
+  "peerDependencies": {
+      "react": "<= 15.x.x"
+  },
   "devDependencies": {
     "babel-cli": "6.8.0",
     "babel-eslint": "6.0.4",
