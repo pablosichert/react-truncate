@@ -121,45 +121,38 @@ export default class Truncate extends Component {
                 let lower = 0;
                 let upper = textRest.length - 1;
 
-                let testLine;
-
                 while (lower <= upper) {
                     let middle = Math.floor((lower + upper) / 2);
 
-                    testLine = textRest.slice(0, middle);
+                    let testLine = textRest.slice(0, middle + 1);
 
                     if (measureWidth(testLine + ellipsisText) <= targetWidth) {
-                        resultLine = <span>{testLine}{ellipsis}</span>;
-
                         lower = middle + 1;
                     } else {
                         upper = middle - 1;
                     }
                 }
+
+                resultLine = <span>{textRest.slice(0, lower)}{ellipsis}</span>;
             } else {
                 // Binary search determining when the line breaks //
                 let lower = 0;
                 let upper = textWords.length - 1;
 
-                let testLine;
-                let resultMiddle;
-
                 while (lower <= upper) {
                     let middle = Math.floor((lower + upper) / 2);
 
-                    testLine = textWords.slice(0, middle).join(' ');
+                    let testLine = textWords.slice(0, middle + 1).join(' ');
 
                     if (measureWidth(testLine) <= targetWidth) {
-                        resultLine = testLine;
-                        resultMiddle = middle;
-
                         lower = middle + 1;
                     } else {
                         upper = middle - 1;
                     }
                 }
 
-                textWords = textWords.slice(resultMiddle, textWords.length);
+                resultLine = textWords.slice(0, lower).join(' ');
+                textWords = textWords.slice(lower, textWords.length);
             }
 
             lines.push(resultLine);
