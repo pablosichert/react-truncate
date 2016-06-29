@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "github.com:One-com/react-truncate"
+    "url": "git@github.com:One-com/react-truncate.git"
   },
   "homepage": "https://github.com/One-com/react-truncate",
   "keywords": [
