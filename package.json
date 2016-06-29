@@ -1,6 +1,6 @@
 {
   "name": "react-truncate",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "React component for truncating multi-line spans and adding an ellipsis",
   "main": "lib/Truncate.js",
   "files": [
@@ -24,7 +24,7 @@
   "author": "Pablo Sichert <kps@one.com>",
   "license": "ISC",
   "peerDependencies": {
-      "react": "<= 15.x.x"
+    "react": "<= 15.x.x"
   },
   "devDependencies": {
     "babel-cli": "6.8.0",
