@@ -177,11 +177,11 @@ export default class Truncate extends Component {
             refs: {
                 target
             },
-            props,
             props: {
                 children,
                 ellipsis,
-                lines
+                lines,
+                ...spanProps
             }
         } = this;
 
@@ -196,7 +196,7 @@ export default class Truncate extends Component {
         }
 
         return (
-            <span {...props} ref='target'>
+            <span {...spanProps} ref='target'>
                 {text}
                 <span style={this.styles.raw}>
                     <span ref='text'>{children}</span>
