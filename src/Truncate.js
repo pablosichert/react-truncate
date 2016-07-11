@@ -151,6 +151,13 @@ export default class Truncate extends Component {
                     }
                 }
 
+                // The first word of this line is too long to fit it
+                if (lower === 0) {
+                    // Jump to processing of last line
+                    line = numLines - 1;
+                    continue;
+                }
+
                 resultLine = textWords.slice(0, lower).join(' ');
                 textWords = textWords.slice(lower, textWords.length);
             }
