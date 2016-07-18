@@ -10,6 +10,8 @@
     "compile": "babel ./src --out-dir ./lib",
     "lint": "eslint .",
     "prepublish": "npm run compile",
+    "preversion": "npm run test",
+    "test": "npm run lint && mocha",
     "travis": "npm run compile"
   },
   "repository": {
@@ -40,6 +42,7 @@
     "eslint-config-onelint": "1.1.0",
     "eslint-config-onelint-react": "0.0.3",
     "eslint-plugin-react": "4.3.0",
+    "mocha": "2.5.3",
     "react": "15.2.1",
     "react-dom": "15.2.1"
   }
