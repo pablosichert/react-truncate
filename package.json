@@ -8,6 +8,7 @@
   ],
   "scripts": {
     "compile": "babel ./src --out-dir ./lib",
+    "lint": "eslint .",
     "prepublish": "npm run compile",
     "travis": "npm run compile"
   },
