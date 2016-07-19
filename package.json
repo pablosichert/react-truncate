@@ -11,7 +11,7 @@
     "lint": "eslint .",
     "prepublish": "npm run compile",
     "preversion": "npm run test",
-    "test": "npm run lint && mocha",
+    "test": "npm run lint && mocha --compilers js:babel-core/register",
     "travis": "npm run compile"
   },
   "repository": {
