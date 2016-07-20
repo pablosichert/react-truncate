@@ -16,6 +16,8 @@ export default class Truncate extends Component {
         lines: 1
     };
 
+    state = {};
+
     componentDidMount() {
         let canvas = document.createElement('canvas');
         this.canvas = canvas.getContext('2d');
@@ -30,33 +32,32 @@ export default class Truncate extends Component {
     }
 
     onResize = () => {
-        this.setState({
-            targetWidth: null
-        }, this.calcTargetWidth);
+        this.calcTargetWidth();
     };
 
     calcTargetWidth = () => {
+        let {
+            refs: {
+                target
+            },
+            calcTargetWidth,
+            canvas
+        } = this;
+
         // Calculation is no longer relevant, since node has been removed
-        if (!this.refs.target) {
+        if (!target) {
             return;
         }
 
+        let targetWidth = target.parentNode.getBoundingClientRect().width;
+
         // Delay calculation until parent node is inserted to the document
         // Mounting order in React is ChildComponent, ParentComponent
-        if (!this.refs.target.parentNode.getBoundingClientRect().width) {
-            return requestAnimationFrame(this.calcTargetWidth);
+        if (!targetWidth) {
+            return requestAnimationFrame(calcTargetWidth);
         }
 
-        this.refs.target.style.display = 'inline-block';
-        this.refs.target.style.width = '100%';
-        this.refs.target.style.whiteSpace = null;
-
-        let style = window.getComputedStyle(this.refs.target);
-        let targetWidth = this.refs.target.clientWidth;
-
-        this.refs.target.style.display = null;
-        this.refs.target.style.width = null;
-        this.refs.target.style.whiteSpace = 'nowrap';
+        let style = window.getComputedStyle(target);
 
         let font = [
             style['font-weight'],
@@ -65,7 +66,7 @@ export default class Truncate extends Component {
             style['font-family']
         ].join(' ');
 
-        this.canvas.font = font;
+        canvas.font = font;
 
         this.setState({
             targetWidth
@@ -76,13 +77,7 @@ export default class Truncate extends Component {
         return this.canvas.measureText(text).width;
     };
 
-    resetTargetStyle = () => {
-        this.refs.target.style.display = null;
-        this.refs.target.style.width = null;
-        this.refs.target.style.whiteSpace = null;
-    };
-
-    getLines() {
+    getLines = () => {
         let {
             refs: {
                 text: {
@@ -166,7 +161,7 @@ export default class Truncate extends Component {
         }
 
         return lines;
-    }
+    };
 
     renderLine = (line, i, arr) => {
         if (i === arr.length - 1) {
@@ -189,17 +184,18 @@ export default class Truncate extends Component {
                 ellipsis,
                 lines,
                 ...spanProps
-            }
+            },
+            state: {
+                targetWidth
+            },
+            getLines,
+            renderLine
         } = this;
 
         let text = children;
 
-        if (target) {
-            if (lines > 0) {
-                text = this.getLines().map(this.renderLine);
-            } else {
-                this.resetTargetStyle();
-            }
+        if (target && targetWidth && lines > 0) {
+            text = getLines().map(renderLine);
         }
 
         return (
