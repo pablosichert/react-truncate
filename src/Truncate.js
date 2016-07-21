@@ -27,6 +27,10 @@ export default class Truncate extends Component {
         this.onResize();
     }
 
+    componentDidUpdate() {
+        this.onResize();
+    }
+
     componentWillUnmount() {
         window.removeEventListener('resize', this.onResize);
     }
