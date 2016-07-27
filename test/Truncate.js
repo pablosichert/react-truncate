@@ -2,16 +2,14 @@ import React, { Component } from 'react';
 import { createRenderer, renderIntoDocument } from 'react-addons-test-utils';
 import unexpected from 'unexpected';
 import unexpectedReact from 'unexpected-react';
+import unexpectedDOM from 'unexpected-dom';
 import sinon from 'sinon';
 import { jsdom } from 'jsdom';
 import requestAnimationFrame from 'raf';
 import Canvas from 'canvas';
+import { stripIndent } from 'common-tags';
 
 import Truncate from '../src/Truncate';
-
-const expect = unexpected.clone()
-    .use(unexpectedReact)
-;
 
 global.document = jsdom();
 global.window = global.document.defaultView;
@@ -23,6 +21,24 @@ for (let key in global.window) {
         global[key] = global.window[key];
     }
 }
+
+const expect = unexpected.clone()
+    .use(unexpectedReact)
+    .use(unexpectedDOM)
+    .addAssertion('<DOMElement> to display text <string>', (expect, subject, value) => {
+        function nodeToText(node) {
+            return Array.prototype.reduce.call(node.children, (prev, curr) => {
+                if (curr instanceof global.window.HTMLBRElement) {
+                    return prev += '\n';
+                }
+
+                return prev += curr.textContent;
+            }, '');
+        }
+
+        return expect(nodeToText(subject), 'to equal', stripIndent`${value}`);
+    })
+;
 
 describe('<Truncate />', () => {
     it('should be a React component', () => {
@@ -37,8 +53,6 @@ describe('<Truncate />', () => {
     });
 
     it('should truncate text', () => {
-        let br = global.window.HTMLBRElement;
-
         sinon.stub(global.window.HTMLDivElement.prototype,
             'getBoundingClientRect', () => ({ width: 85 })
         );
@@ -54,11 +68,10 @@ describe('<Truncate />', () => {
             </div>
         );
 
-        let children = component.children[0].children;
-
-        expect(children[0].textContent, 'to be', 'This text should');
-        expect(children[1], 'to be a', br);
-        expect(children[2].textContent, 'to be', 'stop after here …');
+        expect(component.children[0], 'to display text', `
+            This text should
+            stop after here…
+        `);
 
         global.window.HTMLDivElement.prototype.getBoundingClientRect.restore();
     });
