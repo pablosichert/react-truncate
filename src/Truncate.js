@@ -19,6 +19,9 @@ export default class Truncate extends Component {
     state = {};
 
     componentDidMount() {
+        // Node not needed in document tree to read its content
+        this.refs.raw.parentNode.removeChild(this.refs.raw);
+
         let canvas = document.createElement('canvas');
         this.canvas = canvas.getContext('2d');
 
@@ -201,7 +204,7 @@ export default class Truncate extends Component {
         return (
             <span {...spanProps} ref='target'>
                 {text}
-                <span style={this.styles.raw}>
+                <span ref='raw' style={this.styles.raw}>
                     <span ref='text'>{children}</span>
                     <span ref='ellipsis'>{ellipsis}</span>
                 </span>
