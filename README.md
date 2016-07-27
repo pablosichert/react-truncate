@@ -1,4 +1,11 @@
 # React-Truncate
+[![NPM version][npm-image]][npm-url]
+[![Downloads][downloads-image]][npm-url]
+[![Build status][travis-image]][travis-url]
+[![Coverage status][coveralls-image]][coveralls-url]
+[![Dependency status][david-dm-image]][david-dm-url]
+[![Dev dependency status][david-dm-dev-image]][david-dm-dev-url]
+
 ## Install
 ```
 npm install react-truncate
@@ -82,3 +89,15 @@ ReadMore.propTypes = {
 
 export default ReadMore;
 ```
+
+[npm-url]: https://npmjs.org/package/react-truncate
+[downloads-image]: http://img.shields.io/npm/dm/react-truncate.svg
+[npm-image]: https://badge.fury.io/js/react-truncate.svg
+[travis-url]: https://travis-ci.org/One-com/react-truncate
+[travis-image]: http://img.shields.io/travis/One-com/react-truncate.svg
+[coveralls-url]:https://coveralls.io/r/One-com/react-truncate
+[coveralls-image]:https://coveralls.io/repos/One-com/react-truncate/badge.png
+[david-dm-url]:https://david-dm.org/One-com/react-truncate
+[david-dm-image]:https://david-dm.org/One-com/react-truncate.svg
+[david-dm-dev-url]:https://david-dm.org/One-com/react-truncate#info=devDependencies
+[david-dm-dev-image]:https://david-dm.org/One-com/react-truncate/dev-status.svg
