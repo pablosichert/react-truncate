@@ -1,11 +1,13 @@
 import unexpected from 'unexpected';
 import unexpectedReact from 'unexpected-react';
+import unexpectedSinon from 'unexpected-sinon';
 import unexpectedDOM from 'unexpected-dom';
 import sinon from 'sinon';
 import { jsdom } from 'jsdom';
 import requestAnimationFrame from 'raf';
 import Canvas from 'canvas';
 import React, { Component } from 'react';
+import { render, unmountComponentAtNode } from 'react-dom';
 import { createRenderer, renderIntoDocument } from 'react-addons-test-utils';
 import { stripIndent } from 'common-tags';
 
@@ -24,6 +26,7 @@ for (let key in global.window) {
 
 const expect = unexpected.clone()
     .use(unexpectedReact)
+    .use(unexpectedSinon)
     .use(unexpectedDOM)
     .addAssertion('<DOMElement> to display text <string>', (expect, subject, value) => {
         function nodeToText(node) {
@@ -150,5 +153,53 @@ describe('<Truncate />', () => {
                 the … read more
             `);
         });
+    });
+
+    it('should recalculate when resizing the window', () => {
+        let calcTargetWidth = sinon.spy(Truncate.prototype, 'calcTargetWidth');
+
+        try {
+            renderIntoDocument(<Truncate />);
+
+            let numCalled = calcTargetWidth.callCount;
+
+            window.dispatchEvent(new window.Event('resize'));
+
+            expect(calcTargetWidth, 'was called times', numCalled + 1);
+        } finally {
+            Truncate.prototype.calcTargetWidth.restore();
+        }
+    });
+
+    it('should clean up all event listeners on window when unmounting', () => {
+        let events = new Set();
+
+        sinon.stub(window, 'addEventListener', (name, handler) => {
+            events.add({
+                name,
+                handler
+            });
+        });
+
+        sinon.stub(window, 'removeEventListener', (name, handler) => {
+            for (let event of events) {
+                if (event.name === name && event.handler === handler) {
+                    events.delete(event);
+                }
+            }
+        });
+
+        try {
+            let container = document.createElement('div');
+
+            render(<Truncate />, container);
+
+            unmountComponentAtNode(container);
+
+            expect(events.size, 'to be', 0);
+        } finally {
+            window.addEventListener.restore();
+            window.removeEventListener.restore();
+        }
     });
 });
