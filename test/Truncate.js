@@ -56,6 +56,12 @@ describe('<Truncate />', () => {
     });
 
     describe('with a box of 85px mocked out', () => {
+        let renderIntoBox = component => renderIntoDocument(
+            <div>
+                {component}
+            </div>
+        ).children[0];
+
         before(() => {
             sinon.stub(global.window.HTMLDivElement.prototype,
                 'getBoundingClientRect', () => ({ width: 85 })
@@ -67,34 +73,30 @@ describe('<Truncate />', () => {
         });
 
         it('should truncate text', () => {
-            let component = renderIntoDocument(
-                <div>
-                    <Truncate lines={2} ellipsis='…'>
-                        This text should
-                        stop after here
-                        and not contain the
-                        next lines
-                    </Truncate>
-                </div>
+            let component = renderIntoBox(
+                <Truncate lines={2} ellipsis='…'>
+                    This text should
+                    stop after here
+                    and not contain the
+                    next lines
+                </Truncate>
             );
 
-            expect(component.children[0], 'to display text', `
+            expect(component, 'to display text', `
                 This text should
                 stop after here…
             `);
         });
 
         it("should not add empty lines when text doesn't fill all lines", () => {
-            let component = renderIntoDocument(
-                <div>
-                    <Truncate lines={4}>
-                        Some short text
-                        over here
-                    </Truncate>
-                </div>
+            let component = renderIntoBox(
+                <Truncate lines={4}>
+                    Some short text
+                    over here
+                </Truncate>
             );
 
-            expect(component.children[0], 'to display text', `
+            expect(component, 'to display text', `
                 Some short text
                 over here
             `);
@@ -104,12 +106,10 @@ describe('<Truncate />', () => {
             let Wrapper = class extends Component {
                 render() {
                     return (
-                        <div>
-                            <Truncate lines={false}>
-                                Preserve this text
-                                as it was!
-                            </Truncate>
-                        </div>
+                        <Truncate lines={false}>
+                            Preserve this text
+                            as it was!
+                        </Truncate>
                     );
                 }
             };
@@ -122,33 +122,29 @@ describe('<Truncate />', () => {
         });
 
         it('should end truncating when a single word is bigger than its line', () => {
-            let component = renderIntoDocument(
-                <div>
-                    <Truncate lines={2} ellipsis='…'>
-                        Thereisasuperlongwordinthefirstline
-                        so that the next lines won't be
-                        visible
-                    </Truncate>
-                </div>
+            let component = renderIntoBox(
+                <Truncate lines={2} ellipsis='…'>
+                    Thereisasuperlongwordinthefirstline
+                    so that the next lines won't be
+                    visible
+                </Truncate>
             );
 
-            expect(component.children[0], 'to display text', `
+            expect(component, 'to display text', `
                 Thereisasuperl…
             `);
         });
 
         it('should be able to use a react component as ellipsis', () => {
-            let component = renderIntoDocument(
-                <div>
-                    <Truncate lines={2} ellipsis={<a href='#'>… read more</a>}>
-                        I'm curious what
-                        the next lines of
-                        text will say!
-                    </Truncate>
-                </div>
+            let component = renderIntoBox(
+                <Truncate lines={2} ellipsis={<a href='#'>… read more</a>}>
+                    I'm curious what
+                    the next lines of
+                    text will say!
+                </Truncate>
             );
 
-            expect(component.children[0], 'to display text', `
+            expect(component, 'to display text', `
                 I'm curious what
                 the … read more
             `);
