@@ -18,6 +18,16 @@ export default class Truncate extends Component {
 
     state = {};
 
+    constructor(...args) {
+        super(...args);
+
+        this.onResize = this.onResize.bind(this);
+        this.calcTargetWidth = this.calcTargetWidth.bind(this);
+        this.measureWidth = this.measureWidth.bind(this);
+        this.getLines = this.getLines.bind(this);
+        this.renderLine = this.renderLine.bind(this);
+    }
+
     componentDidMount() {
         // Node not needed in document tree to read its content
         this.refs.raw.parentNode.removeChild(this.refs.raw);
@@ -34,11 +44,11 @@ export default class Truncate extends Component {
         window.removeEventListener('resize', this.onResize);
     }
 
-    onResize = () => {
+    onResize() {
         this.calcTargetWidth();
-    };
+    }
 
-    calcTargetWidth = () => {
+    calcTargetWidth() {
         let {
             refs: {
                 target
@@ -74,13 +84,13 @@ export default class Truncate extends Component {
         this.setState({
             targetWidth
         });
-    };
+    }
 
-    measureWidth = text => {
+    measureWidth(text) {
         return this.canvas.measureText(text).width;
-    };
+    }
 
-    getLines = () => {
+    getLines() {
         let {
             refs: {
                 text: {
@@ -164,9 +174,9 @@ export default class Truncate extends Component {
         }
 
         return lines;
-    };
+    }
 
-    renderLine = (line, i, arr) => {
+    renderLine(line, i, arr) {
         if (i === arr.length - 1) {
             return <span key={i}>{line}</span>;
         } else {
@@ -175,7 +185,7 @@ export default class Truncate extends Component {
                 <br key={i + 'br'} />
             ];
         }
-    };
+    }
 
     render() {
         let {
