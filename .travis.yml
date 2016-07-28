@@ -2,3 +2,17 @@ language: node_js
 node_js:
   - "6"
 script: "npm run travis"
+env:
+  - CXX=g++-4.8
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - build-essential
+      - g++-4.8
+      - libcairo2-dev
+      - libgif-dev
+      - libjpeg8-dev
+      - libpango1.0-dev
+after_success: npm run report-coverage

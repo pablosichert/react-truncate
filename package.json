@@ -8,8 +8,13 @@
   ],
   "scripts": {
     "compile": "babel ./src --out-dir ./lib",
+    "coverage": "nyc npm test && nyc report --reporter=text-lcov",
+    "lint": "eslint .",
     "prepublish": "npm run compile",
-    "travis": "npm run compile"
+    "preversion": "npm run test",
+    "report-coverage": "npm run coverage | coveralls",
+    "test": "npm run lint && mocha --compilers js:babel-core/register",
+    "travis": "npm run compile && npm run test"
   },
   "repository": {
     "type": "git",
@@ -35,11 +40,24 @@
     "babel-plugin-transform-object-rest-spread": "6.8.0",
     "babel-preset-es2015": "6.6.0",
     "babel-preset-react": "6.5.0",
+    "canvas": "1.4.0",
+    "common-tags": "1.3.1",
+    "coveralls": "2.11.12",
     "eslint": "2.9.0",
     "eslint-config-onelint": "1.1.0",
     "eslint-config-onelint-react": "0.0.3",
     "eslint-plugin-react": "4.3.0",
+    "jsdom": "9.4.1",
+    "mocha": "2.5.3",
+    "nyc": "7.1.0",
+    "raf": "3.2.0",
     "react": "15.2.1",
-    "react-dom": "15.2.1"
+    "react-addons-test-utils": "15.2.1",
+    "react-dom": "15.2.1",
+    "sinon": "1.17.4",
+    "unexpected": "10.15.0",
+    "unexpected-dom": "3.1.0",
+    "unexpected-react": "3.2.3",
+    "unexpected-sinon": "^10.2.1"
   }
 }
