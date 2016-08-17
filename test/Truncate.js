@@ -149,6 +149,36 @@ describe('<Truncate />', () => {
                 the … read more
             `);
         });
+
+        it('should update content when new children are passed in', () => {
+            let container = document.createElement('div');
+
+            let component = render(
+                <div>
+                    <Truncate lines={1}>
+                        Some old content
+                    </Truncate>
+                </div>,
+                container
+            );
+
+            expect(component, 'to display text', `
+                Some old cont…
+            `);
+
+            render(
+                <div>
+                    <Truncate lines={1}>
+                        Some new content
+                    </Truncate>
+                </div>,
+                container
+            );
+
+            expect(component, 'to display text', `
+                Some new con…
+            `);
+        });
     });
 
     it('should recalculate when resizing the window', () => {

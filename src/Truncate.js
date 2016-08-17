@@ -40,6 +40,13 @@ export default class Truncate extends Component {
         this.onResize();
     }
 
+    componentDidUpdate(prevProps) {
+        // Render was based on outdated refs and needs to be rerun
+        if (this.props.children !== prevProps.children) {
+            this.forceUpdate();
+        }
+    }
+
     componentWillUnmount() {
         window.removeEventListener('resize', this.onResize);
     }
