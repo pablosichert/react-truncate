@@ -7,7 +7,8 @@ export default class Truncate extends Component {
         lines: PropTypes.oneOfType([
             PropTypes.oneOf([false]),
             PropTypes.number
-        ])
+        ]),
+        onTruncate: PropTypes.func
     };
 
     static defaultProps = {
@@ -109,7 +110,8 @@ export default class Truncate extends Component {
             },
             props: {
                 lines: numLines,
-                ellipsis
+                ellipsis,
+                onTruncate
             },
             state: {
                 targetWidth
@@ -119,12 +121,15 @@ export default class Truncate extends Component {
 
         let lines = [];
         let textWords = text.split(' ');
+        let didTruncate = true;
 
         for (let line = 1; line <= numLines; line++) {
             let resultLine = textWords.join(' ');
 
             if (measureWidth(resultLine) < targetWidth) {
                 // Line is end of text and fits without truncating //
+                didTruncate = false;
+
                 lines.push(resultLine);
                 break;
             }
@@ -180,6 +185,10 @@ export default class Truncate extends Component {
             lines.push(resultLine);
         }
 
+        try {
+            onTruncate(didTruncate);
+        } catch (error) {}
+
         return lines;
     }
 
@@ -203,6 +212,7 @@ export default class Truncate extends Component {
                 children,
                 ellipsis,
                 lines,
+                onTruncate,
                 ...spanProps
             },
             state: {
@@ -216,6 +226,10 @@ export default class Truncate extends Component {
 
         if (target && targetWidth && lines > 0) {
             text = getLines().map(renderLine);
+        } else {
+            try {
+                onTruncate(false);
+            } catch (error) {}
         }
 
         return (

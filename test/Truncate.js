@@ -27,6 +27,9 @@ for (let key in global.window) {
 const expect = unexpected.clone()
     .use(unexpectedReact)
     .use(unexpectedSinon)
+    .addAssertion('<spyCall> to have arguments <any*>', (expect, subject, ...args) => {
+        return expect(subject, 'to satisfy', { args });
+    })
     .use(unexpectedDOM)
     .addAssertion('<DOMElement> to display text <string>', (expect, subject, value) => {
         function nodeToText(node) {
@@ -178,6 +181,51 @@ describe('<Truncate />', () => {
             expect(component, 'to display text', `
                 Some new con…
             `);
+        });
+
+        describe('onTruncate', () => {
+            it('should call with true when text was truncated', () => {
+                let handleTruncate = sinon.spy();
+
+                renderIntoBox(
+                    <Truncate onTruncate={handleTruncate}>
+                        This is some text
+                        that got truncated
+                    </Truncate>
+                );
+
+                expect(handleTruncate.lastCall, 'to have arguments', true);
+            });
+
+            describe('should call with false when text was not truncated because', () => {
+                it('was disabled with lines prop', () => {
+                    let handleTruncate = sinon.spy();
+
+                    renderIntoBox(
+                        <Truncate lines={false} onTruncate={handleTruncate}>
+                            This is some text
+                            that did not get
+                            truncated
+                        </Truncate>
+                    );
+
+                    expect(handleTruncate.lastCall, 'to have arguments', false);
+                });
+
+                it('has shorter text than lines allow', () => {
+                    let handleTruncate = sinon.spy();
+
+                    renderIntoBox(
+                        <Truncate lines={3} onTruncate={handleTruncate}>
+                            This is some text
+                            that did not get
+                            truncated
+                        </Truncate>
+                    );
+
+                    expect(handleTruncate.lastCall, 'to have arguments', false);
+                });
+            });
         });
     });
 
