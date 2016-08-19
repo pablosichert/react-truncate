@@ -65,7 +65,7 @@ class ReadMore extends Component {
 
         return (
             <Truncate
-                lines={this.state.readMore ? 0 : lines}
+                lines={this.state.readMore && lines}
                 ellipsis={(
                    <span>... <a href='#' onClick={this.toggleLines}>{text}</a></span>
                 )}
