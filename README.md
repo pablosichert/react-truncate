@@ -34,7 +34,7 @@ class Foo extends Component {
 | lines | integer, boolean {false} | 1 | Specifies how many lines of text should be preserved until it gets truncated. `false` and any integer < 1 will result in the text not getting clipped at all. | (`false`, `-1`, `0`), `1`, ...  |
 | ellipsis | string, React node | '…' | An ellipsis that is added to the end of the text in case it is truncated. | `'...'`, `<span>...</span>`, `<span>... <a href='#' onClick={someHandler}>Read more</a></span>`, `[<span key='some'>Some</span>, <span key='siblings'>siblings<span>]`
 | children | string, React node | | The text to be truncated. Anything that can be evaluated as text. | `'Some text'`, `<p>Some paragraph <a/>with other text-based inline elements<a></p>`, `<span>Some</span><span>siblings</span>` |
-| onTruncate | function | | Gets invoked on each render. Gets called with `true` when text got truncated and ellipsis was injected, and with `false` otherwise. | `isTruncated => this.setState({ isTruncated })` |
+| onTruncate | function | | Gets invoked on each render. Gets called with `true` when text got truncated and ellipsis was injected, and with `false` otherwise. | `isTruncated => isTruncated !== this.state.isTruncated && this.setState({ isTruncated })` |
 
 ## Known issues
 - Text exceeding horizontal boundaries when "viewport" meta tag is not set accordingly for mobile devices (font boosting leads to wrong calculations). See [issue](https://github.com/One-com/react-truncate/issues/4#issuecomment-226703499)
