@@ -184,64 +184,88 @@ describe('<Truncate />', () => {
         });
 
         describe('onTruncate', () => {
-            before(() => {
-                // Stub the onTruncate function in a synchronous manner
-                sinon.stub(Truncate.prototype, 'onTruncate', function (didTruncate) {
-                    let {
-                        onTruncate
-                    } = this.props;
+            describe('with Truncate.prototype.onTruncate mocked out', () => {
+                before(() => {
+                    // Stub the onTruncate function in a synchronous manner
+                    sinon.stub(Truncate.prototype, 'onTruncate', function (didTruncate) {
+                        let {
+                            onTruncate
+                        } = this.props;
 
-                    if (typeof onTruncate === 'function') {
-                        onTruncate(didTruncate);
-                    }
+                        if (typeof onTruncate === 'function') {
+                            onTruncate(didTruncate);
+                        }
+                    });
+                });
+
+                after(() => {
+                    Truncate.prototype.onTruncate.restore();
+                });
+
+                it('should call with true when text was truncated', () => {
+                    let handleTruncate = sinon.spy();
+
+                    renderIntoBox(
+                        <Truncate onTruncate={handleTruncate}>
+                            This is some text
+                            that got truncated
+                        </Truncate>
+                    );
+
+                    expect(handleTruncate.lastCall, 'to have arguments', true);
+                });
+
+                describe('should call with false when text was not truncated because', () => {
+                    it('was disabled with lines prop', () => {
+                        let handleTruncate = sinon.spy();
+
+                        renderIntoBox(
+                            <Truncate lines={false} onTruncate={handleTruncate}>
+                                This is some text
+                                that did not get
+                                truncated
+                            </Truncate>
+                        );
+
+                        expect(handleTruncate.lastCall, 'to have arguments', false);
+                    });
+
+                    it('has shorter text than lines allow', () => {
+                        let handleTruncate = sinon.spy();
+
+                        renderIntoBox(
+                            <Truncate lines={3} onTruncate={handleTruncate}>
+                                This is some text
+                                that did not get
+                                truncated
+                            </Truncate>
+                        );
+
+                        expect(handleTruncate.lastCall, 'to have arguments', false);
+                    });
                 });
             });
 
-            after(() => {
-                Truncate.prototype.onTruncate.restore();
-            });
+            it('should invoke asynchronously', async () => {
+                let fulfill;
 
-            it('should call with true when text was truncated', () => {
-                let handleTruncate = sinon.spy();
+                let promise = new Promise(resolve => {
+                    fulfill = resolve;
+                });
+
+                let handleTruncate = sinon.spy(() => {
+                    fulfill();
+                });
 
                 renderIntoBox(
-                    <Truncate onTruncate={handleTruncate}>
-                        This is some text
-                        that got truncated
-                    </Truncate>
+                    <Truncate onTruncate={handleTruncate} />
                 );
 
-                expect(handleTruncate.lastCall, 'to have arguments', true);
-            });
+                expect(handleTruncate, 'was not called');
 
-            describe('should call with false when text was not truncated because', () => {
-                it('was disabled with lines prop', () => {
-                    let handleTruncate = sinon.spy();
+                await promise;
 
-                    renderIntoBox(
-                        <Truncate lines={false} onTruncate={handleTruncate}>
-                            This is some text
-                            that did not get
-                            truncated
-                        </Truncate>
-                    );
-
-                    expect(handleTruncate.lastCall, 'to have arguments', false);
-                });
-
-                it('has shorter text than lines allow', () => {
-                    let handleTruncate = sinon.spy();
-
-                    renderIntoBox(
-                        <Truncate lines={3} onTruncate={handleTruncate}>
-                            This is some text
-                            that did not get
-                            truncated
-                        </Truncate>
-                    );
-
-                    expect(handleTruncate.lastCall, 'to have arguments', false);
-                });
+                expect(handleTruncate, 'was called');
             });
         });
     });
