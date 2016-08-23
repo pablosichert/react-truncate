@@ -4,8 +4,14 @@
         "react"
     ],
     "plugins": [
+        "add-module-exports",
+        "syntax-async-functions",
         "transform-class-properties",
         "transform-object-rest-spread",
-        "add-module-exports"
+        "transform-regenerator",
+        ["transform-runtime", {
+          "polyfill": false,
+          "regenerator": true
+        }]
     ]
 }
