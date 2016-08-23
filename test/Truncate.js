@@ -184,6 +184,23 @@ describe('<Truncate />', () => {
         });
 
         describe('onTruncate', () => {
+            before(() => {
+                // Stub the onTruncate function in a synchronous manner
+                sinon.stub(Truncate.prototype, 'onTruncate', function (didTruncate) {
+                    let {
+                        onTruncate
+                    } = this.props;
+
+                    if (typeof onTruncate === 'function') {
+                        onTruncate(didTruncate);
+                    }
+                });
+            });
+
+            after(() => {
+                Truncate.prototype.onTruncate.restore();
+            });
+
             it('should call with true when text was truncated', () => {
                 let handleTruncate = sinon.spy();
 

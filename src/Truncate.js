@@ -23,6 +23,7 @@ export default class Truncate extends Component {
         super(...args);
 
         this.onResize = this.onResize.bind(this);
+        this.onTruncate = this.onTruncate.bind(this);
         this.calcTargetWidth = this.calcTargetWidth.bind(this);
         this.measureWidth = this.measureWidth.bind(this);
         this.getLines = this.getLines.bind(this);
@@ -50,10 +51,24 @@ export default class Truncate extends Component {
 
     componentWillUnmount() {
         window.removeEventListener('resize', this.onResize);
+
+        clearTimeout(this.timeout);
     }
 
     onResize() {
         this.calcTargetWidth();
+    }
+
+    onTruncate(didTruncate) {
+        let {
+            onTruncate
+        } = this.props;
+
+        if (typeof onTruncate === 'function') {
+            this.timeout = setTimeout(() => {
+                onTruncate(didTruncate);
+            }, 0);
+        }
     }
 
     calcTargetWidth() {
@@ -110,13 +125,13 @@ export default class Truncate extends Component {
             },
             props: {
                 lines: numLines,
-                ellipsis,
-                onTruncate
+                ellipsis
             },
             state: {
                 targetWidth
             },
-            measureWidth
+            measureWidth,
+            onTruncate
         } = this;
 
         let lines = [];
@@ -185,9 +200,7 @@ export default class Truncate extends Component {
             lines.push(resultLine);
         }
 
-        if (typeof onTruncate === 'function') {
-            onTruncate(didTruncate);
-        }
+        onTruncate(didTruncate);
 
         return lines;
     }
@@ -212,14 +225,14 @@ export default class Truncate extends Component {
                 children,
                 ellipsis,
                 lines,
-                onTruncate,
                 ...spanProps
             },
             state: {
                 targetWidth
             },
             getLines,
-            renderLine
+            renderLine,
+            onTruncate
         } = this;
 
         let text = children;
@@ -227,10 +240,10 @@ export default class Truncate extends Component {
         if (target && targetWidth && lines > 0) {
             text = getLines().map(renderLine);
         } else {
-            if (typeof onTruncate === 'function') {
-                onTruncate(false);
-            }
+            onTruncate(false);
         }
+
+        delete spanProps.onTruncate;
 
         return (
             <span {...spanProps} ref='target'>
