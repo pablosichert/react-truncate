@@ -185,9 +185,9 @@ export default class Truncate extends Component {
             lines.push(resultLine);
         }
 
-        try {
+        if (typeof onTruncate === 'function') {
             onTruncate(didTruncate);
-        } catch (error) {}
+        }
 
         return lines;
     }
@@ -227,9 +227,9 @@ export default class Truncate extends Component {
         if (target && targetWidth && lines > 0) {
             text = getLines().map(renderLine);
         } else {
-            try {
+            if (typeof onTruncate === 'function') {
                 onTruncate(false);
-            } catch (error) {}
+            }
         }
 
         return (
