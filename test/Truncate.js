@@ -4,7 +4,7 @@ import unexpectedSinon from 'unexpected-sinon';
 import unexpectedDOM from 'unexpected-dom';
 import sinon from 'sinon';
 import { jsdom } from 'jsdom';
-import requestAnimationFrame from 'raf';
+import requestAnimationFrame, { cancel as cancelAnimationFrame } from 'raf';
 import Canvas from 'canvas';
 import React, { Component } from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
@@ -17,6 +17,7 @@ global.document = jsdom();
 global.window = global.document.defaultView;
 global.window.Canvas = Canvas;
 global.window.requestAnimationFrame = requestAnimationFrame;
+global.window.cancelAnimationFrame = cancelAnimationFrame;
 
 for (let key in global.window) {
     if (!global[key]) {

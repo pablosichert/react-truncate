@@ -52,7 +52,7 @@ export default class Truncate extends Component {
     componentWillUnmount() {
         window.removeEventListener('resize', this.onResize);
 
-        clearTimeout(this.timeout);
+        cancelAnimationFrame(this.timeout);
     }
 
     onResize() {
@@ -65,9 +65,9 @@ export default class Truncate extends Component {
         } = this.props;
 
         if (typeof onTruncate === 'function') {
-            this.timeout = setTimeout(() => {
+            this.timeout = requestAnimationFrame(() => {
                 onTruncate(didTruncate);
-            }, 0);
+            });
         }
     }
 
