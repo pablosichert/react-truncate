@@ -237,10 +237,12 @@ export default class Truncate extends Component {
 
         let text = children;
 
-        if (target && targetWidth && lines > 0) {
-            text = getLines().map(renderLine);
-        } else {
-            onTruncate(false);
+        if (typeof window !== 'undefined') {
+            if (target && targetWidth && lines > 0) {
+                text = getLines().map(renderLine);
+            } else {
+                onTruncate(false);
+            }
         }
 
         delete spanProps.onTruncate;
