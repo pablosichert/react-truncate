@@ -125,6 +125,7 @@ export default class Truncate extends Component {
             },
             props: {
                 lines: numLines,
+                ellipsisTextOverride,
                 ellipsis
             },
             state: {
@@ -133,6 +134,11 @@ export default class Truncate extends Component {
             measureWidth,
             onTruncate
         } = this;
+
+        // do we have an ellipsisTextOverride?  if so, use that
+        if (ellipsisTextOverride) {
+          ellipsisText = ellipsisTextOverride;
+        }
 
         let lines = [];
         let textWords = text.split(' ');
@@ -161,7 +167,7 @@ export default class Truncate extends Component {
 
                     let testLine = textRest.slice(0, middle + 1);
 
-                    if (measureWidth(testLine + ellipsisText) <= targetWidth) {
+                    if (measureWidth(testLine + ellipsisText ) <= targetWidth) {
                         lower = middle + 1;
                     } else {
                         upper = middle - 1;
