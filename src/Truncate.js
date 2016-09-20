@@ -32,7 +32,10 @@ export default class Truncate extends Component {
 
     componentDidMount() {
         // Node not needed in document tree to read its content
-        this.refs.raw.parentNode.removeChild(this.refs.raw);
+        this.refs.text.parentNode.removeChild(this.refs.text);
+
+        // Keep node in document body to read .offsetWidth
+        document.body.appendChild(this.refs.ellipsis);
 
         let canvas = document.createElement('canvas');
         this.canvas = canvas.getContext('2d');
@@ -50,6 +53,8 @@ export default class Truncate extends Component {
     }
 
     componentWillUnmount() {
+        document.body.removeChild(this.refs.ellipsis);
+
         window.removeEventListener('resize', this.onResize);
 
         cancelAnimationFrame(this.timeout);
@@ -252,17 +257,20 @@ export default class Truncate extends Component {
         return (
             <span {...spanProps} ref='target'>
                 {text}
-                <span ref='raw' style={this.styles.raw}>
-                    <span ref='text'>{children}</span>
-                    <span ref='ellipsis'>{ellipsis}</span>
+                <span ref='text'>{children}</span>
+                <span ref='ellipsis' style={this.styles.ellipsis}>
+                    {ellipsis}
                 </span>
             </span>
         );
     }
 
     styles = {
-        raw: {
-            display: 'none'
+        ellipsis: {
+            position: 'fixed',
+            visibility: 'hidden',
+            top: 0,
+            left: 0
         }
     };
 };
