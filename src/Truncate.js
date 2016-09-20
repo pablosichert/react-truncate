@@ -113,14 +113,15 @@ export default class Truncate extends Component {
         return this.canvas.measureText(text).width;
     }
 
+    ellipsisWidth(node) {
+        return node.offsetWidth;
+    }
+
     getLines() {
         let {
             refs: {
                 text: {
                     textContent: text
-                },
-                ellipsis: {
-                    textContent: ellipsisText
                 }
             },
             props: {
@@ -137,6 +138,7 @@ export default class Truncate extends Component {
         let lines = [];
         let textWords = text.split(' ');
         let didTruncate = true;
+        let ellipsisWidth = this.ellipsisWidth(this.refs.ellipsis);
 
         for (let line = 1; line <= numLines; line++) {
             let resultLine = textWords.join(' ');
@@ -161,7 +163,7 @@ export default class Truncate extends Component {
 
                     let testLine = textRest.slice(0, middle + 1);
 
-                    if (measureWidth(testLine + ellipsisText) <= targetWidth) {
+                    if (measureWidth(testLine) + ellipsisWidth <= targetWidth) {
                         lower = middle + 1;
                     } else {
                         upper = middle - 1;

@@ -88,10 +88,22 @@ describe('<Truncate />', () => {
                 sinon.stub(global.window.HTMLDivElement.prototype,
                     'getBoundingClientRect', () => ({ width: 85 })
                 );
+
+                // Approximate .offsetWidth with context.measureText
+                sinon.stub(Truncate.prototype,
+                    'ellipsisWidth', node => {
+                        let canvas = document.createElement('canvas');
+                        let context = canvas.getContext('2d');
+
+                        return context.measureText(node.textContent).width;
+                    }
+                );
             });
 
             after(() => {
                 global.window.HTMLDivElement.prototype.getBoundingClientRect.restore();
+
+                Truncate.prototype.ellipsisWidth.restore();
             });
 
             it('should truncate text', () => {
