@@ -349,4 +349,18 @@ describe('<Truncate />', () => {
             }
         });
     });
+
+    describe('ellipsisWidth', () => {
+        it('should equal node.offsetWidth', () => {
+            let offsetWidth = () => 123;
+
+            let node = {};
+
+            Object.defineProperty(node, 'offsetWidth', {
+                get: offsetWidth
+            });
+
+            expect(Truncate.prototype.ellipsisWidth(node), 'to be', 123);
+        });
+    });
 });
