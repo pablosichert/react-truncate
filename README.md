@@ -98,7 +98,7 @@ export default ReadMore;
 [travis-url]: https://travis-ci.org/One-com/react-truncate
 [travis-image]: http://img.shields.io/travis/One-com/react-truncate.svg
 [coveralls-url]:https://coveralls.io/r/One-com/react-truncate
-[coveralls-image]:https://coveralls.io/repos/One-com/react-truncate/badge.png
+[coveralls-image]:https://coveralls.io/repos/One-com/react-truncate/badge.svg
 [david-dm-url]:https://david-dm.org/One-com/react-truncate
 [david-dm-image]:https://david-dm.org/One-com/react-truncate.svg
 [david-dm-dev-url]:https://david-dm.org/One-com/react-truncate#info=devDependencies
