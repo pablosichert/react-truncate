@@ -39,6 +39,7 @@ class Foo extends Component {
 ## Known issues
 - Text exceeding horizontal boundaries when "viewport" meta tag is not set accordingly for mobile devices (font boosting leads to wrong calculations). See [issue](https://github.com/One-com/react-truncate/issues/4#issuecomment-226703499)
 - Output in plain text only - no support for markup/HTML. See [issue](https://github.com/One-com/react-truncate/issues/8)
+- Wrong line breaks when custom font is loading after the component has rendered. See [issue](https://github.com/One-com/react-truncate/issues/16)
 
 ## Integrated example for toggling "read more" text
 ```js
