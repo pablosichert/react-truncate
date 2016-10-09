@@ -8,10 +8,6 @@
         "syntax-async-functions",
         "transform-class-properties",
         "transform-object-rest-spread",
-        "transform-regenerator",
-        ["transform-runtime", {
-          "polyfill": false,
-          "regenerator": true
-        }]
+        "transform-regenerator"
     ]
 }
