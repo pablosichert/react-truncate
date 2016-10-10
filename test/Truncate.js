@@ -278,15 +278,11 @@ describe('<Truncate />', () => {
                 });
 
                 it('should invoke asynchronously', async () => {
-                    let fulfill;
+                    const nextFrame = () => new Promise(resolve =>
+                        requestAnimationFrame(resolve)
+                    );
 
-                    let promise = new Promise(resolve => {
-                        fulfill = resolve;
-                    });
-
-                    let handleTruncate = sinon.spy(() => {
-                        fulfill();
-                    });
+                    const handleTruncate = sinon.spy();
 
                     renderIntoBox(
                         <Truncate onTruncate={handleTruncate} />
@@ -294,7 +290,7 @@ describe('<Truncate />', () => {
 
                     expect(handleTruncate, 'was not called');
 
-                    await promise;
+                    await nextFrame();
 
                     expect(handleTruncate, 'was called');
                 });
