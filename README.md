@@ -93,6 +93,30 @@ ReadMore.propTypes = {
 export default ReadMore;
 ```
 
+## Developing
+Install system libraries needed for development dependencies
+- https://github.com/Automattic/node-canvas#installation
+
+Install development dependencies
+```
+npm install
+```
+
+Run tests
+```
+npm test
+```
+
+Run code linter
+```
+npm run lint
+```
+
+Compile to ES5 from /src to /lib
+```
+npm run compile
+```
+
 [npm-url]: https://npmjs.org/package/react-truncate
 [downloads-image]: http://img.shields.io/npm/dm/react-truncate.svg
 [npm-image]: https://badge.fury.io/js/react-truncate.svg
