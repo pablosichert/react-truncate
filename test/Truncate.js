@@ -69,6 +69,32 @@ describe('<Truncate />', () => {
             global.window.Canvas = Canvas;
             global.window.requestAnimationFrame = requestAnimationFrame;
             global.window.cancelAnimationFrame = cancelAnimationFrame;
+            Object.defineProperty(global.window.HTMLElement.prototype, 'innerText', {
+                get() {
+                    let text = '';
+
+                    for (let node of this.childNodes) {
+                        if (node instanceof global.window.HTMLBRElement) {
+                            text += '\n';
+                            continue;
+                        }
+
+                        if (node instanceof global.window.Comment) {
+                            continue;
+                        }
+
+                        let {
+                            nodeValue
+                        } = node;
+
+                        if (nodeValue !== undefined) {
+                            text += nodeValue;
+                        }
+                    }
+
+                    return text;
+                }
+            });
 
             for (let key in global.window) {
                 if (!global[key]) {
