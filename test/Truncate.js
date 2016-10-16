@@ -148,6 +148,24 @@ describe('<Truncate />', () => {
                 `);
             });
 
+            it('should preserve newlines', () => {
+                let component = renderIntoBox(
+                    <Truncate lines={4}>
+                        This text
+                        contains<br />
+                        <br />
+                        newlines
+                    </Truncate>
+                );
+
+                expect(component, 'to display text', `
+                    This text
+                    contains
+
+                    newlines
+                `);
+            });
+
             it("should not add empty lines when text doesn't fill all lines", () => {
                 let component = renderIntoBox(
                     <Truncate lines={4}>
