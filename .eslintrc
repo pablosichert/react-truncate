@@ -3,5 +3,8 @@
     extends: [
         'onelint',
         'onelint-react'
-    ]
+    ],
+    rules: {
+        'prefer-const': 'error'
+    }
 }

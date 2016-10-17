@@ -42,7 +42,7 @@ describe('<Truncate />', () => {
     });
 
     it('should render a span', () => {
-        let renderer = createRenderer();
+        const renderer = createRenderer();
         renderer.render(<Truncate />);
 
         expect(renderer, 'to have rendered', <span />);
@@ -74,7 +74,7 @@ describe('<Truncate />', () => {
                 get() {
                     let text = '';
 
-                    for (let node of this.childNodes) {
+                    for (const node of this.childNodes) {
                         if (node instanceof global.window.HTMLBRElement) {
                             text += '\n';
                             continue;
@@ -84,7 +84,7 @@ describe('<Truncate />', () => {
                             continue;
                         }
 
-                        let {
+                        const {
                             nodeValue
                         } = node;
 
@@ -97,7 +97,7 @@ describe('<Truncate />', () => {
                 }
             });
 
-            for (let key in global.window) {
+            for (const key in global.window) {
                 if (!global[key]) {
                     global[key] = global.window[key];
                 }
@@ -105,7 +105,7 @@ describe('<Truncate />', () => {
         });
 
         describe('with a box of 85px mocked out', () => {
-            let renderIntoBox = component => renderIntoDocument(
+            const renderIntoBox = component => renderIntoDocument(
                 <div>
                     {component}
                 </div>
@@ -119,8 +119,8 @@ describe('<Truncate />', () => {
                 // Approximate .offsetWidth with context.measureText
                 sinon.stub(Truncate.prototype,
                     'ellipsisWidth', node => {
-                        let canvas = document.createElement('canvas');
-                        let context = canvas.getContext('2d');
+                        const canvas = document.createElement('canvas');
+                        const context = canvas.getContext('2d');
 
                         return context.measureText(node.textContent).width;
                     }
@@ -134,7 +134,7 @@ describe('<Truncate />', () => {
             });
 
             it('should truncate text', () => {
-                let component = renderIntoBox(
+                const component = renderIntoBox(
                     <Truncate lines={2} ellipsis='…'>
                         This text should
                         stop after here
@@ -150,7 +150,7 @@ describe('<Truncate />', () => {
             });
 
             it('should preserve newlines', () => {
-                let component = renderIntoBox(
+                const component = renderIntoBox(
                     <Truncate lines={4}>
                         This text
                         contains<br />
@@ -168,7 +168,7 @@ describe('<Truncate />', () => {
             });
 
             it("should not add empty lines when text doesn't fill all lines", () => {
-                let component = renderIntoBox(
+                const component = renderIntoBox(
                     <Truncate lines={4}>
                         Some short text
                         over here
@@ -182,7 +182,7 @@ describe('<Truncate />', () => {
             });
 
             it('should not truncate at all if specified in lines prop', () => {
-                let Wrapper = class extends Component {
+                const Wrapper = class extends Component {
                     render() {
                         return (
                             <Truncate lines={false}>
@@ -193,7 +193,7 @@ describe('<Truncate />', () => {
                     }
                 };
 
-                let component = renderIntoDocument(<Wrapper />);
+                const component = renderIntoDocument(<Wrapper />);
 
                 expect(component, 'to contain', (
                     <span>Preserve this text as it was!</span>
@@ -201,7 +201,7 @@ describe('<Truncate />', () => {
             });
 
             it('should end truncating when a single word is bigger than its line', () => {
-                let component = renderIntoBox(
+                const component = renderIntoBox(
                     <Truncate lines={2} ellipsis='…'>
                         Thereisasuperlongwordinthefirstline
                         so that the next lines won't be
@@ -215,7 +215,7 @@ describe('<Truncate />', () => {
             });
 
             it('should be able to use a react component as ellipsis', () => {
-                let component = renderIntoBox(
+                const component = renderIntoBox(
                     <Truncate lines={2} ellipsis={<a href='#'>… read more</a>}>
                         I'm curious what
                         the next lines of
@@ -230,9 +230,9 @@ describe('<Truncate />', () => {
             });
 
             it('should update content when new children are passed in', () => {
-                let container = document.createElement('div');
+                const container = document.createElement('div');
 
-                let component = render(
+                const component = render(
                     <div>
                         <Truncate lines={1}>
                             Some old content
@@ -264,7 +264,7 @@ describe('<Truncate />', () => {
                     before(() => {
                         // Stub the onTruncate function in a synchronous manner
                         sinon.stub(Truncate.prototype, 'onTruncate', function (didTruncate) {
-                            let {
+                            const {
                                 onTruncate
                             } = this.props;
 
@@ -279,7 +279,7 @@ describe('<Truncate />', () => {
                     });
 
                     it('should call with true when text was truncated', () => {
-                        let handleTruncate = sinon.spy();
+                        const handleTruncate = sinon.spy();
 
                         renderIntoBox(
                             <Truncate onTruncate={handleTruncate}>
@@ -293,7 +293,7 @@ describe('<Truncate />', () => {
 
                     describe('should call with false when text was not truncated because', () => {
                         it('was disabled with lines prop', () => {
-                            let handleTruncate = sinon.spy();
+                            const handleTruncate = sinon.spy();
 
                             renderIntoBox(
                                 <Truncate lines={false} onTruncate={handleTruncate}>
@@ -307,7 +307,7 @@ describe('<Truncate />', () => {
                         });
 
                         it('has shorter text than lines allow', () => {
-                            let handleTruncate = sinon.spy();
+                            const handleTruncate = sinon.spy();
 
                             renderIntoBox(
                                 <Truncate lines={3} onTruncate={handleTruncate}>
@@ -343,12 +343,12 @@ describe('<Truncate />', () => {
         });
 
         it('should recalculate when resizing the window', () => {
-            let calcTargetWidth = sinon.spy(Truncate.prototype, 'calcTargetWidth');
+            const calcTargetWidth = sinon.spy(Truncate.prototype, 'calcTargetWidth');
 
             try {
                 renderIntoDocument(<Truncate />);
 
-                let numCalled = calcTargetWidth.callCount;
+                const numCalled = calcTargetWidth.callCount;
 
                 window.dispatchEvent(new window.Event('resize'));
 
@@ -359,7 +359,7 @@ describe('<Truncate />', () => {
         });
 
         it('should clean up all event listeners on window when unmounting', () => {
-            let events = new Set();
+            const events = new Set();
 
             sinon.stub(window, 'addEventListener', (name, handler) => {
                 events.add({
@@ -369,7 +369,7 @@ describe('<Truncate />', () => {
             });
 
             sinon.stub(window, 'removeEventListener', (name, handler) => {
-                for (let event of events) {
+                for (const event of events) {
                     if (event.name === name && event.handler === handler) {
                         events.delete(event);
                     }
@@ -377,7 +377,7 @@ describe('<Truncate />', () => {
             });
 
             try {
-                let container = document.createElement('div');
+                const container = document.createElement('div');
 
                 render(<Truncate />, container);
 
@@ -393,7 +393,7 @@ describe('<Truncate />', () => {
         describe('innerText', () => {
             describe('browser implements \\n for <br/>', () => {
                 it('should have newlines only at <br/>', () => {
-                    let node = document.createElement('div');
+                    const node = document.createElement('div');
                     node.innerHTML = 'foo<br/>bar\nbaz';
 
                     expect(Truncate.prototype.innerText(node), 'to be', 'foo\nbar baz');
@@ -407,7 +407,7 @@ describe('<Truncate />', () => {
                         get() {
                             let text = '';
 
-                            for (let node of this.childNodes) {
+                            for (const node of this.childNodes) {
                                 if (node instanceof global.window.HTMLBRElement) {
                                     text += '';
                                     continue;
@@ -417,7 +417,7 @@ describe('<Truncate />', () => {
                                     continue;
                                 }
 
-                                let {
+                                const {
                                     nodeValue
                                 } = node;
 
@@ -432,7 +432,7 @@ describe('<Truncate />', () => {
                 });
 
                 it('should have newlines only at <br/>', () => {
-                    let node = document.createElement('div');
+                    const node = document.createElement('div');
                     node.innerHTML = 'foo<br/>bar\nbaz';
 
                     expect(Truncate.prototype.innerText(node), 'to be', 'foo\nbar baz');
@@ -443,9 +443,9 @@ describe('<Truncate />', () => {
 
     describe('ellipsisWidth', () => {
         it('should equal node.offsetWidth', () => {
-            let offsetWidth = () => 123;
+            const offsetWidth = () => 123;
 
-            let node = {};
+            const node = {};
 
             Object.defineProperty(node, 'offsetWidth', {
                 get: offsetWidth

@@ -37,7 +37,7 @@ export default class Truncate extends Component {
         // Keep node in document body to read .offsetWidth
         document.body.appendChild(this.refs.ellipsis);
 
-        let canvas = document.createElement('canvas');
+        const canvas = document.createElement('canvas');
         this.canvas = canvas.getContext('2d');
 
         window.addEventListener('resize', this.onResize);
@@ -62,12 +62,12 @@ export default class Truncate extends Component {
 
     // Shim innerText to consistently break lines at <br/> but not at \n
     innerText(node) {
-        let div = document.createElement('div');
+        const div = document.createElement('div');
         div.innerHTML = node.innerHTML.replace(/\r\n|\r|\n/g, ' ');
 
         let text = div.innerText;
 
-        let test = document.createElement('div');
+        const test = document.createElement('div');
         test.innerHTML = 'foo<br/>bar';
 
         if (test.innerText.replace(/\r\n|\r/g, '\n') !== 'foo\nbar') {
@@ -83,7 +83,7 @@ export default class Truncate extends Component {
     }
 
     onTruncate(didTruncate) {
-        let {
+        const {
             onTruncate
         } = this.props;
 
@@ -95,7 +95,7 @@ export default class Truncate extends Component {
     }
 
     calcTargetWidth() {
-        let {
+        const {
             refs: {
                 target
             },
@@ -108,7 +108,7 @@ export default class Truncate extends Component {
             return;
         }
 
-        let targetWidth = target.parentNode.getBoundingClientRect().width;
+        const targetWidth = target.parentNode.getBoundingClientRect().width;
 
         // Delay calculation until parent node is inserted to the document
         // Mounting order in React is ChildComponent, ParentComponent
@@ -116,9 +116,9 @@ export default class Truncate extends Component {
             return requestAnimationFrame(calcTargetWidth);
         }
 
-        let style = window.getComputedStyle(target);
+        const style = window.getComputedStyle(target);
 
-        let font = [
+        const font = [
             style['font-weight'],
             style['font-style'],
             style['font-size'],
@@ -141,7 +141,7 @@ export default class Truncate extends Component {
     }
 
     getLines() {
-        let {
+        const {
             refs,
             props: {
                 lines: numLines,
@@ -155,14 +155,14 @@ export default class Truncate extends Component {
             onTruncate
         } = this;
 
-        let lines = [];
-        let text = innerText(refs.text);
-        let textLines = text.split('\n').map(line => line.split(' '));
+        const lines = [];
+        const text = innerText(refs.text);
+        const textLines = text.split('\n').map(line => line.split(' '));
         let didTruncate = true;
-        let ellipsisWidth = this.ellipsisWidth(this.refs.ellipsis);
+        const ellipsisWidth = this.ellipsisWidth(this.refs.ellipsis);
 
         for (let line = 1; line <= numLines; line++) {
-            let textWords = textLines[0];
+            const textWords = textLines[0];
 
             // Handle newline
             if (textWords.length === 0) {
@@ -186,15 +186,15 @@ export default class Truncate extends Component {
 
             if (line === numLines) {
                 // Binary search determining the longest possible line inluding truncate string //
-                let textRest = textWords.join(' ');
+                const textRest = textWords.join(' ');
 
                 let lower = 0;
                 let upper = textRest.length - 1;
 
                 while (lower <= upper) {
-                    let middle = Math.floor((lower + upper) / 2);
+                    const middle = Math.floor((lower + upper) / 2);
 
-                    let testLine = textRest.slice(0, middle + 1);
+                    const testLine = textRest.slice(0, middle + 1);
 
                     if (measureWidth(testLine) + ellipsisWidth <= targetWidth) {
                         lower = middle + 1;
@@ -210,9 +210,9 @@ export default class Truncate extends Component {
                 let upper = textWords.length - 1;
 
                 while (lower <= upper) {
-                    let middle = Math.floor((lower + upper) / 2);
+                    const middle = Math.floor((lower + upper) / 2);
 
-                    let testLine = textWords.slice(0, middle + 1).join(' ');
+                    const testLine = textWords.slice(0, middle + 1).join(' ');
 
                     if (measureWidth(testLine) <= targetWidth) {
                         lower = middle + 1;
@@ -244,7 +244,7 @@ export default class Truncate extends Component {
         if (i === arr.length - 1) {
             return <span key={i}>{line}</span>;
         } else {
-            let br = <br key={i + 'br'} />;
+            const br = <br key={i + 'br'} />;
 
             if (line) {
                 return [
@@ -258,7 +258,7 @@ export default class Truncate extends Component {
     }
 
     render() {
-        let {
+        const {
             refs: {
                 target
             },
