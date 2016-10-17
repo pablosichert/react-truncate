@@ -70,6 +70,7 @@ describe('<Truncate />', () => {
             global.window.requestAnimationFrame = requestAnimationFrame;
             global.window.cancelAnimationFrame = cancelAnimationFrame;
             Object.defineProperty(global.window.HTMLElement.prototype, 'innerText', {
+                configurable: true,
                 get() {
                     let text = '';
 
@@ -387,6 +388,56 @@ describe('<Truncate />', () => {
                 window.addEventListener.restore();
                 window.removeEventListener.restore();
             }
+        });
+
+        describe('innerText', () => {
+            describe('browser implements \\n for <br/>', () => {
+                it('should have newlines only at <br/>', () => {
+                    let node = document.createElement('div');
+                    node.innerHTML = 'foo<br/>bar\nbaz';
+
+                    expect(Truncate.prototype.innerText(node), 'to be', 'foo\nbar baz');
+                });
+            });
+
+            describe('browser implements "" for <br/>', () => {
+                before(() => {
+                    Object.defineProperty(global.window.HTMLElement.prototype, 'innerText', {
+                        configurable: true,
+                        get() {
+                            let text = '';
+
+                            for (let node of this.childNodes) {
+                                if (node instanceof global.window.HTMLBRElement) {
+                                    text += '';
+                                    continue;
+                                }
+
+                                if (node instanceof global.window.Comment) {
+                                    continue;
+                                }
+
+                                let {
+                                    nodeValue
+                                } = node;
+
+                                if (nodeValue !== undefined) {
+                                    text += nodeValue;
+                                }
+                            }
+
+                            return text;
+                        }
+                    });
+                });
+
+                it('should have newlines only at <br/>', () => {
+                    let node = document.createElement('div');
+                    node.innerHTML = 'foo<br/>bar\nbaz';
+
+                    expect(Truncate.prototype.innerText(node), 'to be', 'foo\nbar baz');
+                });
+            });
         });
     });
 

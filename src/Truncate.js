@@ -60,6 +60,24 @@ export default class Truncate extends Component {
         cancelAnimationFrame(this.timeout);
     }
 
+    // Shim innerText to consistently break lines at <br/> but not at \n
+    innerText(node) {
+        let div = document.createElement('div');
+        div.innerHTML = node.innerHTML.replace(/\r\n|\r|\n/g, ' ');
+
+        let text = div.innerText;
+
+        let test = document.createElement('div');
+        test.innerHTML = 'foo<br/>bar';
+
+        if (test.innerText.replace(/\r\n|\r/g, '\n') !== 'foo\nbar') {
+            div.innerHTML = div.innerHTML.replace(/<br.*?[\/]?>/gi, '\n');
+            text = div.innerText;
+        }
+
+        return text;
+    }
+
     onResize() {
         this.calcTargetWidth();
     }
@@ -124,11 +142,7 @@ export default class Truncate extends Component {
 
     getLines() {
         let {
-            refs: {
-                text: {
-                    innerText: text
-                }
-            },
+            refs,
             props: {
                 lines: numLines,
                 ellipsis
@@ -136,11 +150,13 @@ export default class Truncate extends Component {
             state: {
                 targetWidth
             },
+            innerText,
             measureWidth,
             onTruncate
         } = this;
 
         let lines = [];
+        let text = innerText(refs.text);
         let textLines = text.split('\n').map(line => line.split(' '));
         let didTruncate = true;
         let ellipsisWidth = this.ellipsisWidth(this.refs.ellipsis);
