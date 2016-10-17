@@ -28,6 +28,22 @@ class Foo extends Component {
 }
 ```
 
+Hint: (Generally with React) if you want to preserve newlines from plain text, you need to do as follows:
+```js
+//...
+    {text.split('\n').map((line, i, arr) => {
+        if (i === arr.length - 1) {
+            return <span key={i}>{line}</span>;
+        } else {
+            return [
+                <span key={i}>{line}</span>,
+                <br key={i + 'br'} />
+            ];
+        }
+    })}
+//...
+```
+
 ## API
 | Prop | Type | Default | Description | Example |
 | ---- | ---- | ------- | ----------- | ------- |

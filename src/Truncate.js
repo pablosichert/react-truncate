@@ -60,6 +60,24 @@ export default class Truncate extends Component {
         cancelAnimationFrame(this.timeout);
     }
 
+    // Shim innerText to consistently break lines at <br/> but not at \n
+    innerText(node) {
+        let div = document.createElement('div');
+        div.innerHTML = node.innerHTML.replace(/\r\n|\r|\n/g, ' ');
+
+        let text = div.innerText;
+
+        let test = document.createElement('div');
+        test.innerHTML = 'foo<br/>bar';
+
+        if (test.innerText.replace(/\r\n|\r/g, '\n') !== 'foo\nbar') {
+            div.innerHTML = div.innerHTML.replace(/<br.*?[\/]?>/gi, '\n');
+            text = div.innerText;
+        }
+
+        return text;
+    }
+
     onResize() {
         this.calcTargetWidth();
     }
@@ -124,11 +142,7 @@ export default class Truncate extends Component {
 
     getLines() {
         let {
-            refs: {
-                text: {
-                    textContent: text
-                }
-            },
+            refs,
             props: {
                 lines: numLines,
                 ellipsis
@@ -136,24 +150,38 @@ export default class Truncate extends Component {
             state: {
                 targetWidth
             },
+            innerText,
             measureWidth,
             onTruncate
         } = this;
 
         let lines = [];
-        let textWords = text.split(' ');
+        let text = innerText(refs.text);
+        let textLines = text.split('\n').map(line => line.split(' '));
         let didTruncate = true;
         let ellipsisWidth = this.ellipsisWidth(this.refs.ellipsis);
 
         for (let line = 1; line <= numLines; line++) {
+            let textWords = textLines[0];
+
+            // Handle newline
+            if (textWords.length === 0) {
+                lines.push();
+                textLines.shift();
+                line--;
+                continue;
+            }
+
             let resultLine = textWords.join(' ');
 
             if (measureWidth(resultLine) < targetWidth) {
-                // Line is end of text and fits without truncating //
-                didTruncate = false;
+                if (textLines.length === 1) {
+                    // Line is end of text and fits without truncating //
+                    didTruncate = false;
 
-                lines.push(resultLine);
-                break;
+                    lines.push(resultLine);
+                    break;
+                }
             }
 
             if (line === numLines) {
@@ -201,7 +229,7 @@ export default class Truncate extends Component {
                 }
 
                 resultLine = textWords.slice(0, lower).join(' ');
-                textWords = textWords.slice(lower, textWords.length);
+                textLines[0].splice(0, lower);
             }
 
             lines.push(resultLine);
@@ -216,10 +244,16 @@ export default class Truncate extends Component {
         if (i === arr.length - 1) {
             return <span key={i}>{line}</span>;
         } else {
-            return [
-                <span key={i}>{line}</span>,
-                <br key={i + 'br'} />
-            ];
+            let br = <br key={i + 'br'} />;
+
+            if (line) {
+                return [
+                    <span key={i}>{line}</span>,
+                    br
+                ];
+            } else {
+                return br;
+            }
         }
     }
 
