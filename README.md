@@ -32,13 +32,12 @@ Hint: (Generally with React) if you want to preserve newlines from plain text, y
 ```js
 //...
     {text.split('\n').map((line, i, arr) => {
+        const line = <span key={i}>{line}</span>;
+
         if (i === arr.length - 1) {
-            return <span key={i}>{line}</span>;
+            return line;
         } else {
-            return [
-                <span key={i}>{line}</span>,
-                <br key={i + 'br'} />
-            ];
+            return [line, <br key={i + 'br'} />];
         }
     })}
 //...
