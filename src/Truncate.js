@@ -276,12 +276,13 @@ export default class Truncate extends Component {
             onTruncate
         } = this;
 
-        let text = children;
+        let text;
 
         if (typeof window !== 'undefined') {
             if (target && targetWidth && lines > 0) {
                 text = getLines().map(renderLine);
             } else {
+                text = children;
                 onTruncate(false);
             }
         }
