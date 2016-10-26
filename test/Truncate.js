@@ -49,7 +49,7 @@ describe('<Truncate />', () => {
     });
 
     describe('in a server environment', () => {
-        it('should render initial static markup', () => {
+        it('should render initial static markup', async () => {
             const markup = renderToString(
                 <Truncate
                     lines={2}
@@ -60,11 +60,11 @@ describe('<Truncate />', () => {
                 </Truncate>
             );
 
-            expect(
-                markup.match(/Some text inside of here/g).length,
-                'to be',
-                1
+            const captures = await expect(
+                markup, 'to match', /Some text inside of here/g
             );
+
+            expect(captures.length, 'to be', 1);
         });
     });
 
