@@ -31,18 +31,29 @@ export default class Truncate extends Component {
     }
 
     componentDidMount() {
-        // Node not needed in document tree to read its content
-        this.refs.text.parentNode.removeChild(this.refs.text);
-
-        // Keep node in document body to read .offsetWidth
-        document.body.appendChild(this.refs.ellipsis);
+        const {
+            refs: {
+                text,
+                ellipsis
+            },
+            calcTargetWidth,
+            onResize
+        } = this;
 
         const canvas = document.createElement('canvas');
         this.canvas = canvas.getContext('2d');
 
-        window.addEventListener('resize', this.onResize);
+        // Keep node in document body to read .offsetWidth
+        document.body.appendChild(ellipsis);
 
-        this.onResize();
+        calcTargetWidth(() => {
+            // Node not needed in document tree to read its content
+            if (text) {
+                text.parentNode.removeChild(text);
+            }
+        });
+
+        window.addEventListener('resize', onResize);
     }
 
     componentDidUpdate(prevProps) {
@@ -53,11 +64,19 @@ export default class Truncate extends Component {
     }
 
     componentWillUnmount() {
-        document.body.removeChild(this.refs.ellipsis);
+        const {
+            refs: {
+                ellipsis
+            },
+            onResize,
+            timeout
+        } = this;
 
-        window.removeEventListener('resize', this.onResize);
+        ellipsis.parentNode.removeChild(ellipsis);
 
-        cancelAnimationFrame(this.timeout);
+        window.removeEventListener('resize', onResize);
+
+        cancelAnimationFrame(timeout);
     }
 
     // Shim innerText to consistently break lines at <br/> but not at \n
@@ -94,7 +113,7 @@ export default class Truncate extends Component {
         }
     }
 
-    calcTargetWidth() {
+    calcTargetWidth(callback) {
         const {
             refs: {
                 target
@@ -113,7 +132,7 @@ export default class Truncate extends Component {
         // Delay calculation until parent node is inserted to the document
         // Mounting order in React is ChildComponent, ParentComponent
         if (!targetWidth) {
-            return requestAnimationFrame(calcTargetWidth);
+            return requestAnimationFrame(() => calcTargetWidth(callback));
         }
 
         const style = window.getComputedStyle(target);
@@ -129,7 +148,7 @@ export default class Truncate extends Component {
 
         this.setState({
             targetWidth
-        });
+        }, callback);
     }
 
     measureWidth(text) {
