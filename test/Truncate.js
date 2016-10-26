@@ -50,7 +50,7 @@ describe('<Truncate />', () => {
 
     describe('in a server environment', () => {
         it('should render initial static markup', () => {
-            renderToString(
+            const markup = renderToString(
                 <Truncate
                     lines={2}
                     ellipsis='…'
@@ -58,6 +58,12 @@ describe('<Truncate />', () => {
                 >
                     Some text inside of here
                 </Truncate>
+            );
+
+            expect(
+                markup.match(/Some text inside of here/g).length,
+                'to be',
+                1
             );
         });
     });
