@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "compile": "babel-node ./scripts/compile.js"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.16.0",
+    "babelify": "^7.3.0",
+    "browserify": "^13.1.1"
+  }
+}
