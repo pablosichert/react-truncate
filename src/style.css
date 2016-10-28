@@ -1,0 +1,11 @@
+body {
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 0;
+    margin: 0;
+    background: radial-gradient(at 25%, #FFFFFF, rgba(255,255,255,.75) 50%, rgba(255,255,255,0)), radial-gradient(at 75%, #FFFFFF, rgba(255,255,255,.75) 50%, rgba(255,255,255,0));
+    background-color: #CCCCCC;
+    font-family: sans-serif;
+}
