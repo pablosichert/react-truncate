@@ -8,7 +8,7 @@
 
 ## Install
 ```
-npm install react-truncate
+$ npm install react-truncate
 ```
 
 ## Usage
@@ -114,22 +114,22 @@ Install system libraries needed for development dependencies
 
 Install development dependencies
 ```
-npm install
+$ npm install
 ```
 
 Run tests
 ```
-npm test
+$ npm test
 ```
 
 Run code linter
 ```
-npm run lint
+$ npm run lint
 ```
 
 Compile to ES5 from /src to /lib
 ```
-npm run compile
+$ npm run compile
 ```
 
 Initialize demo project
