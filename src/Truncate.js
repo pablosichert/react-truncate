@@ -303,6 +303,8 @@ export default class Truncate extends Component {
             if (lines > 0) {
                 text = getLines().map(renderLine);
             } else {
+                text = children;
+
                 onTruncate(false);
             }
         }
