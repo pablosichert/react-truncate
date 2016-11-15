@@ -188,12 +188,18 @@ describe('<Truncate />', () => {
             });
 
             it('should not truncate at all if specified in lines prop', () => {
+                const Content = props => (
+                    <span>
+                        Preserve this text
+                        as it was!
+                    </span>
+                );
+
                 const Wrapper = class extends Component {
                     render() {
                         return (
                             <Truncate lines={false}>
-                                Preserve this text
-                                as it was!
+                                <Content />
                             </Truncate>
                         );
                     }
@@ -202,7 +208,10 @@ describe('<Truncate />', () => {
                 const component = renderIntoDocument(<Wrapper />);
 
                 expect(component, 'to contain', (
-                    <span>Preserve this text as it was!</span>
+                    <span>
+                        <Content />
+                        <span ref='text'><Content /></span>
+                    </span>
                 ));
             });
 
