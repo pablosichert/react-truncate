@@ -357,6 +357,43 @@ describe('<Truncate />', () => {
             });
         });
 
+        it('should render without an error when the last line is exactly as wide as the container', () => {
+            const text = 'Foo bar - end of text';
+
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            const measureText = context.measureText.bind(context);
+
+            sinon.stub(global.window.HTMLDivElement.prototype,
+                'getBoundingClientRect', () => ({
+                    width: measureText(text).width
+                })
+            );
+
+            // Approximate .offsetWidth with context.measureText
+            sinon.stub(Truncate.prototype,
+                'ellipsisWidth', node => {
+                    return measureText(node.textContent).width;
+                }
+            );
+
+            try {
+                const render = () => renderIntoDocument(
+                    <div>
+                        <Truncate lines={2}>
+                            Foo bar - end of text
+                        </Truncate>
+                    </div>
+                );
+
+                expect(render, 'not to throw');
+            } finally {
+                global.window.HTMLDivElement.prototype.getBoundingClientRect.restore();
+
+                Truncate.prototype.ellipsisWidth.restore();
+            }
+        });
+
         it('should recalculate when resizing the window', () => {
             const calcTargetWidth = sinon.spy(Truncate.prototype, 'calcTargetWidth');
 

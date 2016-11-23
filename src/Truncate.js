@@ -193,7 +193,7 @@ export default class Truncate extends Component {
 
             let resultLine = textWords.join(' ');
 
-            if (measureWidth(resultLine) < targetWidth) {
+            if (measureWidth(resultLine) <= targetWidth) {
                 if (textLines.length === 1) {
                     // Line is end of text and fits without truncating //
                     didTruncate = false;
