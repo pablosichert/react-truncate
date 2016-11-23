@@ -195,7 +195,7 @@ export default class Truncate extends Component {
 
             if (measureWidth(resultLine) <= targetWidth) {
                 if (textLines.length === 1) {
-                    // Line is end of text and fits without truncating //
+                    // Line is end of text and fits without truncating
                     didTruncate = false;
 
                     lines.push(resultLine);
@@ -204,7 +204,7 @@ export default class Truncate extends Component {
             }
 
             if (line === numLines) {
-                // Binary search determining the longest possible line inluding truncate string //
+                // Binary search determining the longest possible line inluding truncate string
                 const textRest = textWords.join(' ');
 
                 let lower = 0;
@@ -224,7 +224,7 @@ export default class Truncate extends Component {
 
                 resultLine = <span>{textRest.slice(0, lower)}{ellipsis}</span>;
             } else {
-                // Binary search determining when the line breaks //
+                // Binary search determining when the line breaks
                 let lower = 0;
                 let upper = textWords.length - 1;
 
