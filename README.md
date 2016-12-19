@@ -65,38 +65,65 @@ class ReadMore extends Component {
     constructor(...args) {
         super(...args);
 
-        this.state = {};
+        this.state = {
+            expanded: false,
+            truncated: false
+        };
 
+        this.handleTruncate = this.handleTruncate.bind(this);
         this.toggleLines = this.toggleLines.bind(this);
+    }
+
+    handleTruncate(truncated) {
+        this.setState({
+            truncated
+        });
     }
 
     toggleLines(event) {
         event.preventDefault();
 
         this.setState({
-            readMore: !this.state.readMore
+            expanded: !this.state.expanded
         });
     }
 
     render() {
-        let { children, text, lines } = this.props;
+        const {
+            children,
+            more,
+            less,
+            lines
+        } = this.props;
+
+        const {
+            expanded,
+            truncated
+        } = this.state;
 
         return (
-            <Truncate
-                lines={this.state.readMore && lines}
-                ellipsis={(
-                   <span>... <a href='#' onClick={this.toggleLines}>{text}</a></span>
+            <div>
+                <Truncate
+                    lines={!expanded && lines}
+                    ellipsis={(
+                        <span>... <a href='#' onClick={this.toggleLines}>{more}</a></span>
+                    )}
+                    onTruncate={this.handleTruncate}
+                >
+                    {children}
+                </Truncate>
+                {!truncated && expanded && (
+                    <span> <a href='#' onClick={this.toggleLines}>{less}</a></span>
                 )}
-            >
-                {children}
-            </Truncate>
+            </div>
         );
     }
 }
 
 ReadMore.defaultProps = {
     lines: 3,
-    text: 'Read more'
+    more: 'Read more',
+    less: 'Show less'
 };
 
 ReadMore.propTypes = {
