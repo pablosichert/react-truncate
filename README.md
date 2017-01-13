@@ -159,19 +159,6 @@ Compile to ES5 from /src to /lib
 $ npm run compile
 ```
 
-Initialize demo project
-```
-$ git clone git@github.com:One-com/react-truncate demo
-$ cd demo
-demo $ git checkout gh-pages
-demo $ npm install
-```
-
-Build demo
-```
-demo $ npm run compile
-```
-
 [npm-url]: https://npmjs.org/package/react-truncate
 [downloads-image]: http://img.shields.io/npm/dm/react-truncate.svg
 [npm-image]: https://badge.fury.io/js/react-truncate.svg
