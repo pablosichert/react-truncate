@@ -141,7 +141,9 @@ export default class Truncate extends Component {
             style['font-weight'],
             style['font-style'],
             style['font-size'],
-            style['font-family']
+            style['font-family'],
+            style['letter-spacing'],
+            style['word-spacing']
         ].join(' ');
 
         canvas.font = font;
