@@ -127,7 +127,11 @@ export default class Truncate extends Component {
             return;
         }
 
-        const targetWidth = target.parentNode.getBoundingClientRect().width;
+        const targetParentStyles = window.getComputedStyle(target.parentNode);
+        const targetParentPadding = parseFloat(targetParentStyles.paddingLeft) +
+                                    parseFloat(targetParentStyles.paddingRight);
+        const targetWidth = target.parentNode.getBoundingClientRect().width -
+                                  targetParentPadding;
 
         // Delay calculation until parent node is inserted to the document
         // Mounting order in React is ChildComponent, ParentComponent
