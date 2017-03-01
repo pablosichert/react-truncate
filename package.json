@@ -5,7 +5,8 @@
   "main": "lib/Truncate.js",
   "module": "src/Truncate.js",
   "files": [
-    "lib"
+    "lib",
+    "src"
   ],
   "scripts": {
     "compile": "babel ./src --out-dir ./lib",
