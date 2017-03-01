@@ -156,7 +156,9 @@ export default class Truncate extends Component {
     }
 
     measureWidth(text) {
-        return this.canvas.measureText(text).width;
+        const targetStyles = window.getComputedStyle(this.refs.target);
+        const letterSpacing = parseFloat(targetStyles['letter-spacing']) || 0;
+        return this.canvas.measureText(text).width + (letterSpacing * text.length);
     }
 
     ellipsisWidth(node) {
