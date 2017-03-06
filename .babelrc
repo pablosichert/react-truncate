@@ -1,13 +1,23 @@
 {
     "presets": [
-        "es2015",
+        ["es2015", { "modules": false }],
         "react"
     ],
     "plugins": [
-        "add-module-exports",
         "syntax-async-functions",
         "transform-class-properties",
         "transform-object-rest-spread",
         "transform-regenerator"
-    ]
+    ],
+    "env": {
+        "CommonJS": {
+            "presets": [
+                "es2015"
+            ],
+            // For some reason this duplicate is needed
+            "plugins": [
+                "transform-class-properties"
+            ]
+        }
+    }
 }
