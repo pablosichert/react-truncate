@@ -15,7 +15,7 @@
     "prepublish": "rm -rf ./lib && npm run compile",
     "preversion": "npm run test",
     "report-coverage": "npm run coverage | coveralls",
-    "test": "mocha --compilers js:babel-core/register --require babel-polyfill",
+    "test": "BABEL_ENV=test mocha --compilers js:babel-core/register --require babel-polyfill",
     "travis": "npm run lint && npm run compile && npm run test"
   },
   "repository": {

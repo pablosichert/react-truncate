@@ -10,6 +10,15 @@
         "transform-regenerator"
     ],
     "env": {
+        "test": {
+            "presets": [
+                "es2015"
+            ],
+            // For some reason this duplicate is needed
+            "plugins": [
+                "transform-class-properties"
+            ]
+        },
         "CommonJS": {
             "presets": [
                 "es2015"
