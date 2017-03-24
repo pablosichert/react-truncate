@@ -111,8 +111,8 @@ describe('<Truncate />', () => {
             }
         });
 
-        // Mock out a box that's 14 characters wide
-        const numCharacters = 14;
+        // Mock out a box that's 16 characters wide
+        const numCharacters = 16;
         const width = numCharacters * characterWidth;
 
         describe(`with a box of ${width}px mocked out`, () => {
@@ -160,7 +160,7 @@ describe('<Truncate />', () => {
 
                 expect(component, 'to display text', `
                     This text should
-                    stop after here …
+                    stop after here…
                 `);
             });
 
@@ -249,7 +249,7 @@ describe('<Truncate />', () => {
 
                 expect(component, 'to display text', `
                     I'm curious what
-                    the… read more
+                    the n… read more
                 `);
             });
 
@@ -259,27 +259,27 @@ describe('<Truncate />', () => {
                 const component = render(
                     <div>
                         <Truncate lines={1}>
-                            Some old content
+                            Some old content here
                         </Truncate>
                     </div>,
                     container
                 );
 
                 expect(component, 'to display text', `
-                    Some old conte…
+                    Some old conten…
                 `);
 
                 render(
                     <div>
                         <Truncate lines={1}>
-                            Some new content
+                            Some new content here
                         </Truncate>
                     </div>,
                     container
                 );
 
                 expect(component, 'to display text', `
-                    Some new cont…
+                    Some new conten…
                 `);
             });
 
@@ -319,8 +319,9 @@ describe('<Truncate />', () => {
 
                         renderIntoBox(
                             <Truncate onTruncate={handleTruncate}>
-                                This is some text
-                                that got truncated
+                                Some text over
+                                here that got
+                                truncated
                             </Truncate>
                         );
 
@@ -333,8 +334,8 @@ describe('<Truncate />', () => {
 
                             renderIntoBox(
                                 <Truncate lines={false} onTruncate={handleTruncate}>
-                                    This is some text
-                                    that did not get
+                                    Some text over
+                                    here that is not
                                     truncated
                                 </Truncate>
                             );
@@ -347,8 +348,8 @@ describe('<Truncate />', () => {
 
                             renderIntoBox(
                                 <Truncate lines={3} onTruncate={handleTruncate}>
-                                    This is some text
-                                    that did not get
+                                    Some text over
+                                    here that is not
                                     truncated
                                 </Truncate>
                             );
