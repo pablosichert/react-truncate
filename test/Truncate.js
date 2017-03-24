@@ -127,6 +127,12 @@ describe('<Truncate />', () => {
                     'getBoundingClientRect', () => ({ width })
                 );
 
+                sinon.stub(Truncate.prototype,
+                    'measureWidth', text => {
+                        return measureWidth(text);
+                    }
+                );
+
                 // Approximate .offsetWidth
                 sinon.stub(Truncate.prototype,
                     'ellipsisWidth', node => {
@@ -138,6 +144,7 @@ describe('<Truncate />', () => {
             after(() => {
                 global.window.HTMLDivElement.prototype.getBoundingClientRect.restore();
 
+                Truncate.prototype.measureWidth.restore();
                 Truncate.prototype.ellipsisWidth.restore();
             });
 
