@@ -276,6 +276,18 @@ describe('<Truncate />', () => {
                 `);
             });
 
+            it('should render without an error when the last line is exactly as wide as the container', () => {
+                const render = () => renderIntoDocument(
+                    <div>
+                        <Truncate lines={2}>
+                            {new Array(numCharacters).fill('a').join()}
+                        </Truncate>
+                    </div>
+                );
+
+                expect(render, 'not to throw');
+            });
+
             describe('onTruncate', () => {
                 describe('with Truncate.prototype.onTruncate mocked out', () => {
                     before(() => {
@@ -357,39 +369,6 @@ describe('<Truncate />', () => {
                     expect(handleTruncate, 'was called');
                 });
             });
-        });
-
-        it('should render without an error when the last line is exactly as wide as the container', () => {
-            const text = 'Foo bar - end of text';
-
-            sinon.stub(global.window.HTMLDivElement.prototype,
-                'getBoundingClientRect', () => ({
-                    width: measureWidth(text)
-                })
-            );
-
-            // Approximate .offsetWidth
-            sinon.stub(Truncate.prototype,
-                'ellipsisWidth', node => {
-                    return measureWidth(text);
-                }
-            );
-
-            try {
-                const render = () => renderIntoDocument(
-                    <div>
-                        <Truncate lines={2}>
-                            Foo bar - end of text
-                        </Truncate>
-                    </div>
-                );
-
-                expect(render, 'not to throw');
-            } finally {
-                global.window.HTMLDivElement.prototype.getBoundingClientRect.restore();
-
-                Truncate.prototype.ellipsisWidth.restore();
-            }
         });
 
         it('should recalculate when resizing the window', () => {
