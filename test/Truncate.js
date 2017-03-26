@@ -5,7 +5,6 @@ import unexpectedDOM from 'unexpected-dom';
 import sinon from 'sinon';
 import { jsdom } from 'jsdom';
 import requestAnimationFrame, { cancel as cancelAnimationFrame } from 'raf';
-import Canvas from 'canvas';
 import React, { Component } from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { renderToString } from 'react-dom/server';
@@ -35,6 +34,9 @@ const expect = unexpected.clone()
         return expect(nodeToText(subject), 'to equal', stripIndent`${value}`);
     })
 ;
+
+const characterWidth = 6; // px
+const measureWidth = text => text.length * characterWidth;
 
 describe('<Truncate />', () => {
     it('should be a React component', () => {
@@ -72,7 +74,6 @@ describe('<Truncate />', () => {
         before(() => {
             global.document = jsdom();
             global.window = global.document.defaultView;
-            global.window.Canvas = Canvas;
             global.window.requestAnimationFrame = requestAnimationFrame;
             global.window.cancelAnimationFrame = cancelAnimationFrame;
             Object.defineProperty(global.window.HTMLElement.prototype, 'innerText', {
@@ -110,7 +111,11 @@ describe('<Truncate />', () => {
             }
         });
 
-        describe('with a box of 85px mocked out', () => {
+        // Mock out a box that's 16 characters wide
+        const numCharacters = 16;
+        const width = numCharacters * characterWidth;
+
+        describe(`with a box of ${width}px mocked out`, () => {
             const renderIntoBox = component => renderIntoDocument(
                 <div>
                     {component}
@@ -119,16 +124,19 @@ describe('<Truncate />', () => {
 
             before(() => {
                 sinon.stub(global.window.HTMLDivElement.prototype,
-                    'getBoundingClientRect', () => ({ width: 85 })
+                    'getBoundingClientRect', () => ({ width })
                 );
 
-                // Approximate .offsetWidth with context.measureText
+                sinon.stub(Truncate.prototype,
+                    'measureWidth', text => {
+                        return measureWidth(text);
+                    }
+                );
+
+                // Approximate .offsetWidth
                 sinon.stub(Truncate.prototype,
                     'ellipsisWidth', node => {
-                        const canvas = document.createElement('canvas');
-                        const context = canvas.getContext('2d');
-
-                        return context.measureText(node.textContent).width;
+                        return measureWidth(node.textContent);
                     }
                 );
             });
@@ -136,6 +144,7 @@ describe('<Truncate />', () => {
             after(() => {
                 global.window.HTMLDivElement.prototype.getBoundingClientRect.restore();
 
+                Truncate.prototype.measureWidth.restore();
                 Truncate.prototype.ellipsisWidth.restore();
             });
 
@@ -225,7 +234,7 @@ describe('<Truncate />', () => {
                 );
 
                 expect(component, 'to display text', `
-                    Thereisasuperl…
+                    Thereisasuperlo…
                 `);
             });
 
@@ -240,7 +249,7 @@ describe('<Truncate />', () => {
 
                 expect(component, 'to display text', `
                     I'm curious what
-                    the … read more
+                    the n… read more
                 `);
             });
 
@@ -250,28 +259,40 @@ describe('<Truncate />', () => {
                 const component = render(
                     <div>
                         <Truncate lines={1}>
-                            Some old content
+                            Some old content here
                         </Truncate>
                     </div>,
                     container
                 );
 
                 expect(component, 'to display text', `
-                    Some old cont…
+                    Some old conten…
                 `);
 
                 render(
                     <div>
                         <Truncate lines={1}>
-                            Some new content
+                            Some new content here
                         </Truncate>
                     </div>,
                     container
                 );
 
                 expect(component, 'to display text', `
-                    Some new con…
+                    Some new conten…
                 `);
+            });
+
+            it('should render without an error when the last line is exactly as wide as the container', () => {
+                const render = () => renderIntoDocument(
+                    <div>
+                        <Truncate lines={2}>
+                            {new Array(numCharacters).fill('a').join()}
+                        </Truncate>
+                    </div>
+                );
+
+                expect(render, 'not to throw');
             });
 
             describe('onTruncate', () => {
@@ -298,8 +319,9 @@ describe('<Truncate />', () => {
 
                         renderIntoBox(
                             <Truncate onTruncate={handleTruncate}>
-                                This is some text
-                                that got truncated
+                                Some text over
+                                here that got
+                                truncated
                             </Truncate>
                         );
 
@@ -312,8 +334,8 @@ describe('<Truncate />', () => {
 
                             renderIntoBox(
                                 <Truncate lines={false} onTruncate={handleTruncate}>
-                                    This is some text
-                                    that did not get
+                                    Some text over
+                                    here that is not
                                     truncated
                                 </Truncate>
                             );
@@ -326,8 +348,8 @@ describe('<Truncate />', () => {
 
                             renderIntoBox(
                                 <Truncate lines={3} onTruncate={handleTruncate}>
-                                    This is some text
-                                    that did not get
+                                    Some text over
+                                    here that is not
                                     truncated
                                 </Truncate>
                             );
@@ -355,43 +377,6 @@ describe('<Truncate />', () => {
                     expect(handleTruncate, 'was called');
                 });
             });
-        });
-
-        it('should render without an error when the last line is exactly as wide as the container', () => {
-            const text = 'Foo bar - end of text';
-
-            const canvas = document.createElement('canvas');
-            const context = canvas.getContext('2d');
-            const measureText = context.measureText.bind(context);
-
-            sinon.stub(global.window.HTMLDivElement.prototype,
-                'getBoundingClientRect', () => ({
-                    width: measureText(text).width
-                })
-            );
-
-            // Approximate .offsetWidth with context.measureText
-            sinon.stub(Truncate.prototype,
-                'ellipsisWidth', node => {
-                    return measureText(node.textContent).width;
-                }
-            );
-
-            try {
-                const render = () => renderIntoDocument(
-                    <div>
-                        <Truncate lines={2}>
-                            Foo bar - end of text
-                        </Truncate>
-                    </div>
-                );
-
-                expect(render, 'not to throw');
-            } finally {
-                global.window.HTMLDivElement.prototype.getBoundingClientRect.restore();
-
-                Truncate.prototype.ellipsisWidth.restore();
-            }
         });
 
         it('should recalculate when resizing the window', () => {
