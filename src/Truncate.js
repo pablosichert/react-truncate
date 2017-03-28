@@ -128,8 +128,8 @@ export default class Truncate extends Component {
         }
 
         const targetParentStyles = window.getComputedStyle(target.parentNode);
-        const targetParentPadding = parseFloat(targetParentStyles.paddingLeft) +
-                                    parseFloat(targetParentStyles.paddingRight);
+        const targetParentPadding = parseFloat(targetParentStyles.paddingLeft || 0) +
+                                    parseFloat(targetParentStyles.paddingRight || 0);
         const targetWidth = target.parentNode.getBoundingClientRect().width -
                                   targetParentPadding;
 
