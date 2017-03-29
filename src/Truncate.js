@@ -128,8 +128,8 @@ export default class Truncate extends Component {
         }
 
         const targetParentStyles = window.getComputedStyle(target.parentNode);
-        const targetParentPadding = parseFloat(targetParentStyles.paddingLeft || 0) +
-                                    parseFloat(targetParentStyles.paddingRight || 0);
+        const targetParentPadding = parseFloat(targetParentStyles['padding-left'] || 0) +
+                                    parseFloat(targetParentStyles['padding-right'] || 0);
         const targetWidth = target.parentNode.getBoundingClientRect().width -
                                   targetParentPadding;
 
@@ -156,7 +156,12 @@ export default class Truncate extends Component {
     }
 
     measureWidth(text) {
-        const targetStyles = window.getComputedStyle(this.refs.target);
+        const {
+            refs: {
+                target
+            }
+        } = this;
+        const targetStyles = window.getComputedStyle(target);
         const letterSpacing = parseFloat(targetStyles['letter-spacing']) || 0;
         return this.canvas.measureText(text).width + (letterSpacing * text.length);
     }
