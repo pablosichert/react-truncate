@@ -406,9 +406,8 @@ describe('<Truncate />', () => {
             });
         });
 
-        it('should recalculate when resizing the window', () => {
+        it('should recalculate when resizing the window', (done) => {
             const calcTargetWidth = sinon.spy(Truncate.prototype, 'calcTargetWidth');
-
             try {
                 renderIntoDocument(<Truncate />);
 
@@ -418,9 +417,9 @@ describe('<Truncate />', () => {
 
                 expect(calcTargetWidth, 'was called times', numCalled + 1);
             } finally {
-                Truncate.prototype.calcTargetWidth.restore();
+                Truncate.prototype.calcTargetWidth.restore(done());
             }
-        });
+        }).timeout(2500);
 
         it('should clean up all event listeners on window when unmounting', () => {
             const events = new Set();
