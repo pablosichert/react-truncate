@@ -58,7 +58,7 @@ Hint: (Generally with React) if you want to preserve newlines from plain text, y
 
 ## Integrated example for toggling "read more" text
 ```js
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Truncate from 'react-truncate';
 
