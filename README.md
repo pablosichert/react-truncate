@@ -76,9 +76,11 @@ class ReadMore extends Component {
     }
 
     handleTruncate(truncated) {
-        this.setState({
-            truncated
-        });
+        if (this.state.truncated !== truncated) {
+            this.setState({
+                truncated
+            });
+        }
     }
 
     toggleLines(event) {
