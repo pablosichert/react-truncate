@@ -122,6 +122,17 @@ describe('<Truncate />', () => {
                 </div>
             ).children[0];
 
+            const spacingAndPaddingStyles = {
+                padding: '10px',
+                letterSpacing: '1px'
+            };
+
+            const renderIntoBoxWithPaddingAndLetterSpacing = component => renderIntoDocument(
+                <div style={spacingAndPaddingStyles}>
+                    {component}
+                </div>
+            ).children[0];
+
             before(() => {
                 sinon.stub(global.window.HTMLDivElement.prototype,
                     'getBoundingClientRect', () => ({ width })
@@ -161,6 +172,22 @@ describe('<Truncate />', () => {
                 expect(component, 'to display text', `
                     This text should
                     stop after here…
+                `);
+            });
+
+            it('should take padding and letter-spacing into account', () => {
+                const component = renderIntoBoxWithPaddingAndLetterSpacing(
+                    <Truncate lines={2} ellipsis='…'>
+                        This text should
+                        stop after here
+                        and not contain the
+                        next lines
+                    </Truncate>
+                );
+
+                expect(component, 'to display text', `
+                    This text
+                    should stop…
                 `);
             });
 
@@ -379,9 +406,8 @@ describe('<Truncate />', () => {
             });
         });
 
-        it('should recalculate when resizing the window', () => {
+        it('should recalculate when resizing the window', (done) => {
             const calcTargetWidth = sinon.spy(Truncate.prototype, 'calcTargetWidth');
-
             try {
                 renderIntoDocument(<Truncate />);
 
@@ -391,9 +417,9 @@ describe('<Truncate />', () => {
 
                 expect(calcTargetWidth, 'was called times', numCalled + 1);
             } finally {
-                Truncate.prototype.calcTargetWidth.restore();
+                Truncate.prototype.calcTargetWidth.restore(done());
             }
-        });
+        }).timeout(2500);
 
         it('should clean up all event listeners on window when unmounting', () => {
             const events = new Set();

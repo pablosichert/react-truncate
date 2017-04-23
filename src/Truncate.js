@@ -128,7 +128,11 @@ export default class Truncate extends Component {
             return;
         }
 
-        const targetWidth = target.parentNode.getBoundingClientRect().width;
+        const targetParentStyles = window.getComputedStyle(target.parentNode);
+        const targetParentPadding = parseFloat(targetParentStyles['padding-left'] || 0) +
+                                    parseFloat(targetParentStyles['padding-right'] || 0);
+        const targetWidth = target.parentNode.getBoundingClientRect().width -
+                                  targetParentPadding;
 
         // Delay calculation until parent node is inserted to the document
         // Mounting order in React is ChildComponent, ParentComponent
@@ -153,7 +157,14 @@ export default class Truncate extends Component {
     }
 
     measureWidth(text) {
-        return this.canvas.measureText(text).width;
+        const {
+            refs: {
+                target
+            }
+        } = this;
+        const targetStyles = window.getComputedStyle(target);
+        const letterSpacing = parseFloat(targetStyles['letter-spacing']) || 0;
+        return this.canvas.measureText(text).width + (letterSpacing * text.length);
     }
 
     ellipsisWidth(node) {
