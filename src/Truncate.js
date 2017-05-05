@@ -147,8 +147,14 @@ export default class Truncate extends Component {
 
         canvas.font = font;
 
+        const parentStyle = window.getComputedStyle(target.parentNode);
+
+        const parentPadding = (
+                ((parseInt(parentStyle['padding-left'])!=NaN)?parseInt(parentStyle['padding-left']):0)
+                + ((parseInt(parentStyle['padding-right'])!=NaN)?parseInt(parentStyle['padding-right']):0));
+
         this.setState({
-            targetWidth
+            (targetWidth - parentPadding)
         }, callback);
     }
 
