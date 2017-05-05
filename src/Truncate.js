@@ -152,10 +152,9 @@ export default class Truncate extends Component {
         const parentPadding = (
                 ((parseInt(parentStyle['padding-left'])!=NaN)?parseInt(parentStyle['padding-left']):0)
                 + ((parseInt(parentStyle['padding-right'])!=NaN)?parseInt(parentStyle['padding-right']):0));
-        targetWidth-=parentPadding
 
         this.setState({
-            targetWidth
+            (targetWidth - parentPadding)
         }, callback);
     }
 
