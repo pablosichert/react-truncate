@@ -128,7 +128,7 @@ export default class Truncate extends Component {
             return;
         }
 
-        const targetWidth = target.parentNode.getBoundingClientRect().width;
+        let targetWidth = target.parentNode.getBoundingClientRect().width;
 
         // Delay calculation until parent node is inserted to the document
         // Mounting order in React is ChildComponent, ParentComponent
@@ -153,8 +153,10 @@ export default class Truncate extends Component {
                 ((parseInt(parentStyle['padding-left'])!=NaN)?parseInt(parentStyle['padding-left']):0)
                 + ((parseInt(parentStyle['padding-right'])!=NaN)?parseInt(parentStyle['padding-right']):0));
 
+        targetWidth-=parentPadding;
+
         this.setState({
-            (targetWidth - parentPadding)
+            targetWidth
         }, callback);
     }
 
