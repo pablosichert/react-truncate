@@ -42,7 +42,7 @@ export default class Truncate extends Component {
         } = this;
 
         const canvas = document.createElement('canvas');
-        this.canvas = canvas.getContext('2d');
+        this.context = canvas.getContext('2d');
 
         // Keep node in document body to read .offsetWidth
         document.body.appendChild(ellipsis);
@@ -120,7 +120,7 @@ export default class Truncate extends Component {
                 target
             },
             calcTargetWidth,
-            canvas
+            context
         } = this;
 
         // Calculation is no longer relevant, since node has been removed
@@ -145,7 +145,7 @@ export default class Truncate extends Component {
             style['font-family']
         ].join(' ');
 
-        canvas.font = font;
+        context.font = font;
 
         this.setState({
             targetWidth
@@ -153,7 +153,7 @@ export default class Truncate extends Component {
     }
 
     measureWidth(text) {
-        return this.canvas.measureText(text).width;
+        return this.context.measureText(text).width;
     }
 
     ellipsisWidth(node) {
