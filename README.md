@@ -162,11 +162,11 @@ Compile to ES5 from /src to /lib
 $ npm run compile
 ```
 
-[npm-url]: https://npmjs.org/package/react-truncate
-[downloads-image]: http://img.shields.io/npm/dm/react-truncate.svg
-[npm-image]: https://badge.fury.io/js/react-truncate.svg
-[travis-url]: https://travis-ci.org/One-com/react-truncate
-[travis-image]: http://img.shields.io/travis/One-com/react-truncate.svg
+[npm-url]:https://npmjs.org/package/react-truncate
+[downloads-image]:http://img.shields.io/npm/dm/react-truncate.svg
+[npm-image]:https://badge.fury.io/js/react-truncate.svg
+[travis-url]:https://travis-ci.org/One-com/react-truncate
+[travis-image]:https://travis-ci.org/One-com/react-truncate.svg?branch=master
 [coveralls-url]:https://coveralls.io/r/One-com/react-truncate
 [coveralls-image]:https://coveralls.io/repos/One-com/react-truncate/badge.svg
 [david-dm-url]:https://david-dm.org/One-com/react-truncate
