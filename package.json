@@ -1,6 +1,6 @@
 {
   "name": "react-truncate",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "description": "React component for truncating multi-line spans and adding an ellipsis",
   "main": "lib/Truncate.CommonJS.js",
   "module": "lib/Truncate.js",
