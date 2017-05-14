@@ -31,6 +31,7 @@
   "author": "Pablo Sichert <kps@one.com>",
   "license": "ISC",
   "peerDependencies": {
+    "prop-types": "<= 15.x.x",
     "react": "<= 15.x.x"
   },
   "devDependencies": {
