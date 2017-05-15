@@ -64,6 +64,10 @@ export default class Truncate extends Component {
         }
     }
 
+    componentDidUpdate() {
+        this.onResize();
+    }
+
     componentWillUnmount() {
         const {
             refs: {
