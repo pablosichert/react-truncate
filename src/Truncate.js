@@ -77,7 +77,7 @@ export default class Truncate extends Component {
 
         window.removeEventListener('resize', onResize);
 
-        cancelAnimationFrame(timeout);
+        window.cancelAnimationFrame(timeout);
     }
 
     // Shim innerText to consistently break lines at <br/> but not at \n
@@ -110,7 +110,7 @@ export default class Truncate extends Component {
         } = this.props;
 
         if (typeof onTruncate === 'function') {
-            this.timeout = requestAnimationFrame(() => {
+            this.timeout = window.requestAnimationFrame(() => {
                 onTruncate(didTruncate);
             });
         }
@@ -135,7 +135,7 @@ export default class Truncate extends Component {
         // Delay calculation until parent node is inserted to the document
         // Mounting order in React is ChildComponent, ParentComponent
         if (!targetWidth) {
-            return requestAnimationFrame(() => calcTargetWidth(callback));
+            return window.requestAnimationFrame(() => calcTargetWidth(callback));
         }
 
         const style = window.getComputedStyle(target);
