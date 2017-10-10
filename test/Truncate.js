@@ -22,17 +22,21 @@ const expect = unexpected.clone()
     })
     .use(unexpectedDOM)
     .addAssertion('<DOMElement> to display text <string>', (expect, subject, value) => {
-        function nodeToText(node) {
-            return Array.prototype.reduce.call(node.children, (prev, curr) => {
-                 if (curr instanceof global.window.HTMLBRElement) {
-                    return prev += '\n';
+        function brToNewline(node) {
+          if(node.hasChildNodes()) {
+            for(let i=0; i < node.childNodes.length; i++) {
+              if(node.childNodes[i].nodeType === 1) {
+                const replaceNode = brToNewline(node.childNodes[i])
+                if(replaceNode !== node.childNodes[i]) {
+                  node.replaceChild(replaceNode, node.childNodes[i])
                 }
-
-                return prev += curr.textContent;
-            }, '');
+              }
+            }
+          }
+          return (node instanceof global.window.HTMLBRElement) ? global.window.document.createTextNode('\n') : node
         }
 
-        return expect(nodeToText(subject), 'to equal', stripIndent`${value}`);
+        return expect(brToNewline(subject).textContent, 'to equal', stripIndent`${value}`);
     })
 ;
 
@@ -220,8 +224,8 @@ describe('<Truncate />', () => {
 
                 expect(component, 'to contain', (
                     <span>
-                        <Content />
-                        <span ref='text'><Content /></span>
+                        <span><Content /></span>
+                        <span><Content /></span>
                     </span>
                 ));
             });

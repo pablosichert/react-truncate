@@ -318,9 +318,9 @@ export default class Truncate extends Component {
 
         return (
             <span {...spanProps} ref={(targetEl) => { this.elements.target = targetEl }}>
-                {text}
-                <span ref={(textEl) => { this.elements.text = textEl }}>{children}</span>
-                <span ref={(ellipsisEl) => { this.elements.ellipsis = ellipsisEl }} style={this.styles.ellipsis}>
+                <span key='text-wrapper'>{text}</span>
+                <span key='children-wrapper' ref={(textEl) => { this.elements.text = textEl }}>{children}</span>
+                <span key='ellipsis-wrapper' ref={(ellipsisEl) => { this.elements.ellipsis = ellipsisEl }} style={this.styles.ellipsis}>
                     {ellipsis}
                 </span>
             </span>
