@@ -23,7 +23,7 @@ export default class Truncate extends Component {
     constructor(...args) {
         super(...args);
 
-        this.elements = {}
+        this.elements = {};
 
         this.onResize = this.onResize.bind(this);
         this.onTruncate = this.onTruncate.bind(this);
@@ -317,10 +317,10 @@ export default class Truncate extends Component {
         delete spanProps.onTruncate;
 
         return (
-            <span {...spanProps} ref={(targetEl) => { this.elements.target = targetEl }}>
+            <span {...spanProps} ref={(targetEl) => { this.elements.target = targetEl; }}>
                 <span key='text-wrapper'>{text}</span>
-                <span key='children-wrapper' ref={(textEl) => { this.elements.text = textEl }}>{children}</span>
-                <span key='ellipsis-wrapper' ref={(ellipsisEl) => { this.elements.ellipsis = ellipsisEl }} style={this.styles.ellipsis}>
+                <span key='children-wrapper' ref={(textEl) => { this.elements.text = textEl; }}>{children}</span>
+                <span key='ellipsis-wrapper' ref={(ellipsisEl) => { this.elements.ellipsis = ellipsisEl; }} style={this.styles.ellipsis}>
                     {ellipsis}
                 </span>
             </span>

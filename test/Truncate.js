@@ -23,17 +23,17 @@ const expect = unexpected.clone()
     .use(unexpectedDOM)
     .addAssertion('<DOMElement> to display text <string>', (expect, subject, value) => {
         function brToNewline(node) {
-          if(node.hasChildNodes()) {
-            for(let i=0; i < node.childNodes.length; i++) {
-              if(node.childNodes[i].nodeType === 1) {
-                const replaceNode = brToNewline(node.childNodes[i])
-                if(replaceNode !== node.childNodes[i]) {
-                  node.replaceChild(replaceNode, node.childNodes[i])
+            if (node.hasChildNodes()) {
+                for (let i = 0; i < node.childNodes.length; i++) {
+                    if (node.childNodes[i].nodeType === 1) {
+                        const replaceNode = brToNewline(node.childNodes[i]);
+                        if (replaceNode !== node.childNodes[i]) {
+                            node.replaceChild(replaceNode, node.childNodes[i]);
+                        }
+                    }
                 }
-              }
             }
-          }
-          return (node instanceof global.window.HTMLBRElement) ? global.window.document.createTextNode('\n') : node
+            return (node instanceof global.window.HTMLBRElement) ? global.window.document.createTextNode('\n') : node;
         }
 
         return expect(brToNewline(subject).textContent, 'to equal', stripIndent`${value}`);
@@ -131,20 +131,14 @@ describe('<Truncate />', () => {
 
             before(() => {
                 sinon.stub(global.window.HTMLDivElement.prototype, 'getBoundingClientRect')
-                    .callsFake( () => ({ width }) );
+                    .callsFake(() => ({width}));
 
                 sinon.stub(Truncate.prototype, 'measureWidth')
-                    .callsFake( text => {
-                            return measureWidth(text);
-                        }
-                    );
+                    .callsFake(text => measureWidth(text));
 
                 // Approximate .offsetWidth
                 sinon.stub(Truncate.prototype, 'ellipsisWidth')
-                    .callsFake( node => {
-                            return measureWidth(node.textContent);
-                        }
-                    );
+                    .callsFake(node => measureWidth(node.textContent));
             });
 
             after(() => {
