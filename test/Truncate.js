@@ -23,7 +23,9 @@ const expect = unexpected.clone()
     .use(unexpectedDOM)
     .addAssertion('<DOMElement> to display text <string>', (expect, subject, value) => {
         function nodeToText(node) {
-            return Array.prototype.reduce.call(node.children, (prev, curr) => {
+            const textNode = node.children[0];
+
+            return Array.prototype.reduce.call(textNode.children, (prev, curr) => {
                 if (curr instanceof global.window.HTMLBRElement) {
                     return prev += '\n';
                 }
@@ -214,8 +216,8 @@ describe('<Truncate />', () => {
 
                 expect(component, 'to contain', (
                     <span>
-                        <Content />
-                        <span ref='text'><Content /></span>
+                        <span><Content /></span>
+                        <span><Content /></span>
                     </span>
                 ));
             });
