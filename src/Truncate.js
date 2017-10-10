@@ -23,6 +23,8 @@ export default class Truncate extends Component {
     constructor(...args) {
         super(...args);
 
+        this.elements = {};
+
         this.onResize = this.onResize.bind(this);
         this.onTruncate = this.onTruncate.bind(this);
         this.calcTargetWidth = this.calcTargetWidth.bind(this);
@@ -33,7 +35,7 @@ export default class Truncate extends Component {
 
     componentDidMount() {
         const {
-            refs: {
+            elements: {
                 text,
                 ellipsis
             },
@@ -66,7 +68,7 @@ export default class Truncate extends Component {
 
     componentWillUnmount() {
         const {
-            refs: {
+            elements: {
                 ellipsis
             },
             onResize,
@@ -118,7 +120,7 @@ export default class Truncate extends Component {
 
     calcTargetWidth(callback) {
         const {
-            refs: {
+            elements: {
                 target
             },
             calcTargetWidth,
@@ -164,7 +166,7 @@ export default class Truncate extends Component {
 
     getLines() {
         const {
-            refs,
+            elements,
             props: {
                 lines: numLines,
                 ellipsis
@@ -178,10 +180,10 @@ export default class Truncate extends Component {
         } = this;
 
         const lines = [];
-        const text = innerText(refs.text);
+        const text = innerText(elements.text);
         const textLines = text.split('\n').map(line => line.split(' '));
         let didTruncate = true;
-        const ellipsisWidth = this.ellipsisWidth(this.refs.ellipsis);
+        const ellipsisWidth = this.ellipsisWidth(this.elements.ellipsis);
 
         for (let line = 1; line <= numLines; line++) {
             const textWords = textLines[0];
@@ -281,7 +283,7 @@ export default class Truncate extends Component {
 
     render() {
         const {
-            refs: {
+            elements: {
                 target
             },
             props: {
@@ -315,10 +317,10 @@ export default class Truncate extends Component {
         delete spanProps.onTruncate;
 
         return (
-            <span {...spanProps} ref='target'>
+            <span {...spanProps} ref={(targetEl) => { this.elements.target = targetEl; }}>
                 {text}
-                <span ref='text'>{children}</span>
-                <span ref='ellipsis' style={this.styles.ellipsis}>
+                <span ref={(textEl) => { this.elements.text = textEl; }}>{children}</span>
+                <span ref={(ellipsisEl) => { this.elements.ellipsis = ellipsisEl; }} style={this.styles.ellipsis}>
                     {ellipsis}
                 </span>
             </span>
