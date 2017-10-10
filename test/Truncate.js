@@ -3,12 +3,13 @@ import unexpectedReact from 'unexpected-react';
 import unexpectedSinon from 'unexpected-sinon';
 import unexpectedDOM from 'unexpected-dom';
 import sinon from 'sinon';
-import { jsdom } from 'jsdom';
+import jsdom from 'jsdom';
 import requestAnimationFrame, { cancel as cancelAnimationFrame } from 'raf';
 import React, { Component } from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { renderToString } from 'react-dom/server';
-import { createRenderer, renderIntoDocument } from 'react-addons-test-utils';
+import { renderIntoDocument } from 'react-dom/test-utils';
+import ShallowRenderer from 'react-test-renderer/shallow';
 import { stripIndent } from 'common-tags';
 
 import Truncate from '../src/Truncate';
@@ -21,17 +22,21 @@ const expect = unexpected.clone()
     })
     .use(unexpectedDOM)
     .addAssertion('<DOMElement> to display text <string>', (expect, subject, value) => {
-        function nodeToText(node) {
-            return Array.prototype.reduce.call(node.children, (prev, curr) => {
-                if (curr instanceof global.window.HTMLBRElement) {
-                    return prev += '\n';
+        function brToNewline(node) {
+            if (node.hasChildNodes()) {
+                for (let i = 0; i < node.childNodes.length; i++) {
+                    if (node.childNodes[i].nodeType === 1) {
+                        const replaceNode = brToNewline(node.childNodes[i]);
+                        if (replaceNode !== node.childNodes[i]) {
+                            node.replaceChild(replaceNode, node.childNodes[i]);
+                        }
+                    }
                 }
-
-                return prev += curr.textContent;
-            }, '');
+            }
+            return (node instanceof global.window.HTMLBRElement) ? global.window.document.createTextNode('\n') : node;
         }
 
-        return expect(nodeToText(subject), 'to equal', stripIndent`${value}`);
+        return expect(brToNewline(subject).textContent, 'to equal', stripIndent`${value}`);
     })
 ;
 
@@ -44,7 +49,7 @@ describe('<Truncate />', () => {
     });
 
     it('should render a span', () => {
-        const renderer = createRenderer();
+        const renderer = new ShallowRenderer();
         renderer.render(<Truncate />);
 
         expect(renderer, 'to have rendered', <span />);
@@ -72,7 +77,9 @@ describe('<Truncate />', () => {
 
     describe('in a client environment', () => {
         before(() => {
-            global.document = jsdom();
+            const { JSDOM } = jsdom;
+            const { document } = (new JSDOM('')).window;
+            global.document = document;
             global.window = global.document.defaultView;
             global.window.requestAnimationFrame = requestAnimationFrame;
             global.window.cancelAnimationFrame = cancelAnimationFrame;
@@ -123,22 +130,15 @@ describe('<Truncate />', () => {
             ).children[0];
 
             before(() => {
-                sinon.stub(global.window.HTMLDivElement.prototype,
-                    'getBoundingClientRect', () => ({ width })
-                );
+                sinon.stub(global.window.HTMLDivElement.prototype, 'getBoundingClientRect')
+                    .callsFake(() => ({width}));
 
-                sinon.stub(Truncate.prototype,
-                    'measureWidth', text => {
-                        return measureWidth(text);
-                    }
-                );
+                sinon.stub(Truncate.prototype, 'measureWidth')
+                    .callsFake(text => measureWidth(text));
 
                 // Approximate .offsetWidth
-                sinon.stub(Truncate.prototype,
-                    'ellipsisWidth', node => {
-                        return measureWidth(node.textContent);
-                    }
-                );
+                sinon.stub(Truncate.prototype, 'ellipsisWidth')
+                    .callsFake(node => measureWidth(node.textContent));
             });
 
             after(() => {
@@ -218,8 +218,8 @@ describe('<Truncate />', () => {
 
                 expect(component, 'to contain', (
                     <span>
-                        <Content />
-                        <span ref='text'><Content /></span>
+                        <span><Content /></span>
+                        <span><Content /></span>
                     </span>
                 ));
             });
@@ -299,7 +299,7 @@ describe('<Truncate />', () => {
                 describe('with Truncate.prototype.onTruncate mocked out', () => {
                     before(() => {
                         // Stub the onTruncate function in a synchronous manner
-                        sinon.stub(Truncate.prototype, 'onTruncate', function (didTruncate) {
+                        sinon.stub(Truncate.prototype, 'onTruncate').callsFake(function (didTruncate) {
                             const {
                                 onTruncate
                             } = this.props;
@@ -398,14 +398,14 @@ describe('<Truncate />', () => {
         it('should clean up all event listeners on window when unmounting', () => {
             const events = new Set();
 
-            sinon.stub(window, 'addEventListener', (name, handler) => {
+            sinon.stub(window, 'addEventListener').callsFake((name, handler) => {
                 events.add({
                     name,
                     handler
                 });
             });
 
-            sinon.stub(window, 'removeEventListener', (name, handler) => {
+            sinon.stub(window, 'removeEventListener').callsFake((name, handler) => {
                 for (const event of events) {
                     if (event.name === name && event.handler === handler) {
                         events.delete(event);
