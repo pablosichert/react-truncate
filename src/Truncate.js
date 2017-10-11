@@ -18,7 +18,9 @@ export default class Truncate extends Component {
         lines: 1
     };
 
-    state = {};
+    state = {
+        isVisible: true
+    };
 
     constructor(...args) {
         super(...args);
@@ -137,6 +139,9 @@ export default class Truncate extends Component {
         // If target isn't visible on the page, then it'll start an infinite
         // loop with requestAnimationFrame below
         if (!targetParentVisible) {
+            this.setState({
+                isVisible: false
+            });
             return;
         }
 
@@ -160,7 +165,8 @@ export default class Truncate extends Component {
         canvasContext.font = font;
 
         this.setState({
-            targetWidth
+            targetWidth,
+            isVisible: true
         }, callback);
     }
 

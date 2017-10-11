@@ -40,6 +40,7 @@ const expect = unexpected.clone()
 
 const characterWidth = 6; // px
 const measureWidth = text => text.length * characterWidth;
+const offsetHeightStub = sinon.stub().returns(1);
 
 describe('<Truncate />', () => {
     it('should be a React component', () => {
@@ -109,10 +110,10 @@ describe('<Truncate />', () => {
                 }
             });
 
-            // offset height is always 0 in jsdom world
+            // offset height is always 0 in jsdom world, so need to stub it out
             Object.defineProperties(global.window.HTMLDivElement.prototype, {
                 offsetHeight: {
-                    get: function () { return 1; }
+                    get: offsetHeightStub
                 }
             });
 
@@ -121,6 +122,10 @@ describe('<Truncate />', () => {
                     global[key] = global.window[key];
                 }
             }
+        });
+
+        beforeEach(() => {
+            offsetHeightStub.returns(1);
         });
 
         // Mock out a box that's 16 characters wide
@@ -382,6 +387,30 @@ describe('<Truncate />', () => {
                     expect(handleTruncate, 'was called');
                 });
             });
+        });
+
+        it('should set isVisible to false when parent node not visible on page', () => {
+            offsetHeightStub.returns(0);
+
+            const component = renderIntoDocument(
+                <Truncate>
+                    Sample text
+                </Truncate>
+            );
+
+            expect(component.state.isVisible, 'to equal', false);
+        });
+
+        it('should set isVisible to true when parent node not visible on page', () => {
+            offsetHeightStub.returns(1);
+
+            const component = renderIntoDocument(
+                <Truncate>
+                    Sample text
+                </Truncate>
+            );
+
+            expect(component.state.isVisible, 'to equal', true);
         });
 
         it('should recalculate when resizing the window', () => {
