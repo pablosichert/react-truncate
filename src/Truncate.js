@@ -132,6 +132,14 @@ export default class Truncate extends Component {
             return;
         }
 
+        const targetParentVisible = target.parentNode.offsetHeight;
+
+        // If target isn't visible on the page, then it'll start an infinite
+        // loop with requestAnimationFrame below
+        if (!targetParentVisible) {
+            return;
+        }
+
         const targetWidth = target.parentNode.getBoundingClientRect().width;
 
         // Delay calculation until parent node is inserted to the document

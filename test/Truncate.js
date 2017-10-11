@@ -109,6 +109,13 @@ describe('<Truncate />', () => {
                 }
             });
 
+            // offset height is always 0 in jsdom world
+            Object.defineProperties(global.window.HTMLDivElement.prototype, {
+                offsetHeight: {
+                    get: function () { return 1; }
+                }
+            });
+
             for (const key in global.window) {
                 if (!global[key]) {
                     global[key] = global.window[key];
