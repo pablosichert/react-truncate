@@ -111,7 +111,7 @@ describe('<Truncate />', () => {
             });
 
             // offset height is always 0 in jsdom world, so need to stub it out
-            Object.defineProperties(global.window.HTMLDivElement.prototype, {
+            Object.defineProperties(global.window.HTMLSpanElement.prototype, {
                 offsetHeight: {
                     get: offsetHeightStub
                 }

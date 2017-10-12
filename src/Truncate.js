@@ -134,11 +134,11 @@ export default class Truncate extends Component {
             return;
         }
 
-        const targetParentVisible = target.parentNode.offsetHeight;
+        const targetVisible = target.offsetHeight;
 
         // If target isn't visible on the page, then it'll start an infinite
         // loop with requestAnimationFrame below
-        if (!targetParentVisible) {
+        if (!targetVisible) {
             this.setState({
                 isVisible: false
             });
