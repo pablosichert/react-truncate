@@ -31,6 +31,7 @@ export default class Truncate extends Component {
         this.measureWidth = this.measureWidth.bind(this);
         this.getLines = this.getLines.bind(this);
         this.renderLine = this.renderLine.bind(this);
+        this.renderLastLine = this.renderLastLine.bind(this);
     }
 
     componentDidMount() {
@@ -171,14 +172,14 @@ export default class Truncate extends Component {
         const {
             elements,
             props: {
-                lines: numLines,
-                ellipsis
+                lines: numLines
             },
             state: {
                 targetWidth
             },
             innerText,
             measureWidth,
+            renderLastLine,
             onTruncate
         } = this;
 
@@ -230,7 +231,7 @@ export default class Truncate extends Component {
                     }
                 }
 
-                resultLine = <span>{textRest.slice(0, lower)}{ellipsis}</span>;
+                resultLine = renderLastLine(textRest.slice(0, lower), textWords);
             } else {
                 // Binary search determining when the line breaks
                 let lower = 0;
@@ -282,6 +283,11 @@ export default class Truncate extends Component {
                 return br;
             }
         }
+    }
+
+    renderLastLine(splicedText, originalArray) {
+        const { ellipsis } = this.props;
+        return (<span>{splicedText}{ellipsis}</span>);
     }
 
     render() {
