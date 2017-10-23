@@ -324,6 +324,38 @@ describe('<Truncate />', () => {
                         contains…
                     `);
                 });
+
+                it('should render empty text without an error', () => {
+                    const container = document.createElement('div');
+
+                    const componentA = render(
+                        <div>
+                            <Truncate lines={1} trimWhitespace />
+                        </div>,
+                        container
+                    );
+
+                    expect(componentA, 'to display text', '');
+                });
+
+                it('should truncate whitespace only text without an error', () => {
+                    const container = document.createElement('div');
+
+                    const componentA = render(
+                        <div>
+                            <Truncate lines={1} trimWhitespace>
+                                <br />
+                                <br />
+                                <br />
+                                <br />
+                                <br />
+                            </Truncate>
+                        </div>,
+                        container
+                    );
+
+                    expect(componentA, 'to display text', '…');
+                });
             });
 
             describe('onTruncate', () => {
@@ -520,6 +552,19 @@ describe('<Truncate />', () => {
             });
 
             expect(Truncate.prototype.ellipsisWidth(node), 'to be', 123);
+        });
+    });
+
+    describe('trimRight', () => {
+        it('should remove whitespace from the end of text', () => {
+            expect(Truncate.prototype.trimRight('some spaces here  '), 'to be', 'some spaces here');
+            expect(Truncate.prototype.trimRight('some other whitespace here  \r\n'), 'to be', 'some other whitespace here');
+            expect(Truncate.prototype.trimRight('\n  '), 'to be', '');
+        });
+
+        it('should leave other text unchanged', () => {
+            expect(Truncate.prototype.trimRight('  whitespace on the left'), 'to be', '  whitespace on the left');
+            expect(Truncate.prototype.trimRight(' just a \n lot of text really'), 'to be', ' just a \n lot of text really');
         });
     });
 });
