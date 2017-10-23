@@ -293,6 +293,39 @@ describe('<Truncate />', () => {
                 expect(render, 'not to throw');
             });
 
+            describe('with trimWhitespace', () => {
+                it('should remove whitespace from before the ellipsis', () => {
+                    const container = document.createElement('div');
+
+                    const componentA = render(
+                        <div>
+                            <Truncate lines={1} trimWhitespace>
+                                Some old stuff here
+                            </Truncate>
+                        </div>,
+                        container
+                    );
+
+                    expect(componentA, 'to display text', `
+                        Some old stuff…
+                    `);
+
+                    const componentB = renderIntoBox(
+                        <Truncate lines={3} trimWhitespace>
+                            This text
+                            contains<br />
+                            <br />
+                            newlines
+                        </Truncate>
+                    );
+
+                    expect(componentB, 'to display text', `
+                        This text
+                        contains…
+                    `);
+                });
+            });
+
             describe('onTruncate', () => {
                 describe('with Truncate.prototype.onTruncate mocked out', () => {
                     before(() => {
