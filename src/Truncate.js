@@ -36,8 +36,7 @@ export default class Truncate extends Component {
     componentDidMount() {
         const {
             elements: {
-                text,
-                ellipsis
+                text
             },
             calcTargetWidth,
             onResize
