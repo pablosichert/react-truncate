@@ -46,9 +46,6 @@ export default class Truncate extends Component {
         const canvas = document.createElement('canvas');
         this.canvasContext = canvas.getContext('2d');
 
-        // Keep node in document body to read .offsetWidth
-        document.body.appendChild(ellipsis);
-
         calcTargetWidth(() => {
             // Node not needed in document tree to read its content
             if (text) {
