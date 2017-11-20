@@ -26,6 +26,10 @@ const expect = unexpected.clone()
             const textNode = node.children[0];
 
             return Array.prototype.reduce.call(textNode.children, (prev, curr) => {
+                if (curr.style.visibility === 'hidden') {
+                    return prev;
+                }
+
                 if (curr instanceof global.window.HTMLBRElement) {
                     return prev += '\n';
                 }
