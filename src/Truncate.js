@@ -9,13 +9,15 @@ export default class Truncate extends Component {
             PropTypes.oneOf([false]),
             PropTypes.number
         ]),
+        trimWhitespace: PropTypes.bool,
         onTruncate: PropTypes.func
     };
 
     static defaultProps = {
         children: '',
         ellipsis: '…',
-        lines: 1
+        lines: 1,
+        trimWhitespace: false
     };
 
     state = {};
@@ -163,19 +165,25 @@ export default class Truncate extends Component {
         return node.offsetWidth;
     }
 
+    trimRight(text) {
+        return text.replace(/\s+$/, '');
+    }
+
     getLines() {
         const {
             elements,
             props: {
                 lines: numLines,
-                ellipsis
+                ellipsis,
+                trimWhitespace
             },
             state: {
                 targetWidth
             },
             innerText,
             measureWidth,
-            onTruncate
+            onTruncate,
+            trimRight
         } = this;
 
         const lines = [];
@@ -226,7 +234,20 @@ export default class Truncate extends Component {
                     }
                 }
 
-                resultLine = <span>{textRest.slice(0, lower)}{ellipsis}</span>;
+                let lastLineText = textRest.slice(0, lower);
+
+                if (trimWhitespace) {
+                    lastLineText = trimRight(lastLineText);
+
+                    // remove blank lines from the end of text
+                    while (!lastLineText.length && lines.length) {
+                        const prevLine = lines.pop();
+
+                        lastLineText = trimRight(prevLine);
+                    }
+                }
+
+                resultLine = <span>{lastLineText}{ellipsis}</span>;
             } else {
                 // Binary search determining when the line breaks
                 let lower = 0;
