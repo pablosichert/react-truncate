@@ -10,14 +10,16 @@ export default class Truncate extends Component {
             PropTypes.number
         ]),
         trimWhitespace: PropTypes.bool,
-        onTruncate: PropTypes.func
+        onTruncate: PropTypes.func,
+        width: PropTypes.number
     };
 
     static defaultProps = {
         children: '',
         ellipsis: '…',
         lines: 1,
-        trimWhitespace: false
+        trimWhitespace: false,
+        width: 0
     };
 
     state = {};
@@ -61,6 +63,10 @@ export default class Truncate extends Component {
         // Render was based on outdated refs and needs to be rerun
         if (this.props.children !== prevProps.children) {
             this.forceUpdate();
+        }
+        // If the width prop has changed, recalculate sizes based on updated refs
+        if (this.props.width !== prevProps.width) {
+            this.onResize();
         }
     }
 
