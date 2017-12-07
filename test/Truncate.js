@@ -447,6 +447,24 @@ describe('<Truncate />', () => {
             }
         });
 
+        it('should recalculate when the width property changes', () => {
+            const calcTargetWidth = sinon.spy(Truncate.prototype, 'calcTargetWidth');
+
+            try {
+                const container = document.createElement('div');
+
+                render(<Truncate width={100} />, container);
+
+                const numCalled = calcTargetWidth.callCount;
+
+                render(<Truncate width={200} />, container);
+
+                expect(calcTargetWidth, 'was called times', numCalled + 1);
+            } finally {
+                Truncate.prototype.calcTargetWidth.restore();
+            }
+        });
+
         it('should clean up all event listeners on window when unmounting', () => {
             const events = new Set();
 
