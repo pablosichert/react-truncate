@@ -134,7 +134,9 @@ ReadMore.defaultProps = {
 ReadMore.propTypes = {
     children: PropTypes.node.isRequired,
     text: PropTypes.node,
-    lines: PropTypes.number
+    lines: PropTypes.number,
+    less: PropTypes.string,
+    more: PropTypes.string
 };
 
 export default ReadMore;
