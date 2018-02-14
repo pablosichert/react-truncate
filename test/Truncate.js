@@ -268,7 +268,7 @@ describe('<Truncate />', () => {
                 );
 
                 expect(component, 'to display text', `
-                    Some old conten……
+                    Some old conten…
                 `);
 
                 render(
@@ -281,7 +281,7 @@ describe('<Truncate />', () => {
                 );
 
                 expect(component, 'to display text', `
-                    Some new conten……
+                    Some new conten…
                 `);
             });
 
