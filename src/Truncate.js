@@ -10,7 +10,7 @@ export default class Truncate extends Component {
             PropTypes.number
         ]),
         trimWhitespace: PropTypes.bool,
-        breakWords: PropTypes.bool,
+        breakAll: PropTypes.bool,
         onTruncate: PropTypes.func
     };
 
@@ -19,7 +19,7 @@ export default class Truncate extends Component {
         ellipsis: '…',
         lines: 1,
         trimWhitespace: false,
-        breakWords: false
+        breakAll: false
     };
 
     state = {};
@@ -178,7 +178,7 @@ export default class Truncate extends Component {
                 lines: numLines,
                 ellipsis,
                 trimWhitespace,
-                breakWords
+                breakAll
             },
             state: {
                 targetWidth
@@ -191,7 +191,7 @@ export default class Truncate extends Component {
 
         const lines = [];
         const text = innerText(elements.text);
-        const wordSeparator = breakWords ? '' : ' ';
+        const wordSeparator = breakAll ? '' : ' ';
         const textLines = text.split('\n').map(line => line.split(wordSeparator));
         let didTruncate = true;
         const ellipsisWidth = this.ellipsisWidth(this.elements.ellipsis);
@@ -340,7 +340,7 @@ export default class Truncate extends Component {
 
         delete spanProps.onTruncate;
         delete spanProps.trimWhitespace;
-        delete spanProps.breakWords;
+        delete spanProps.breakAll;
 
         return (
             <span {...spanProps} ref={(targetEl) => { this.elements.target = targetEl; }}>

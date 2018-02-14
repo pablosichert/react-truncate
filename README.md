@@ -51,7 +51,7 @@ Hint: (Generally with React) if you want to preserve newlines from plain text, y
 | children | string, React node | | The text to be truncated. Anything that can be evaluated as text. | `'Some text'`, `<p>Some paragraph <a/>with other text-based inline elements<a></p>`, `<span>Some</span><span>siblings</span>` |
 | onTruncate | function | | Gets invoked on each render. Gets called with `true` when text got truncated and ellipsis was injected, and with `false` otherwise. | `isTruncated => isTruncated !== this.state.isTruncated && this.setState({ isTruncated })` |
 | trimWhitespace | boolean | false | If `true`, whitespace will be removed from before the ellipsis (e.g. `words ...` will become `words...` instead) | `<Truncate trimWhitespace>{longText}</Truncate>` |
-| breakWords | boolean | false | If `true`, lines will break at any place, not only on spaces (useful for example for truncating multiline URLs). | `<Truncate breakWords lines={3}>{longText}</Truncate>` |
+| breakAll | boolean | false | If `true`, lines will break at any place, not only on spaces (useful for example for truncating multiline URLs). | `<Truncate breakAll lines={3}>{longText}</Truncate>` |
 
 ## Known issues
 - Text exceeding horizontal boundaries when "viewport" meta tag is not set accordingly for mobile devices (font boosting leads to wrong calculations). See [issue](https://github.com/One-com/react-truncate/issues/4#issuecomment-226703499)
