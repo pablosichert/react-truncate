@@ -1,6 +1,6 @@
 {
   "name": "react-truncate",
-  "version": "2.2.2",
+  "version": "2.3.0",
   "description": "React component for truncating multi-line spans and adding an ellipsis",
   "main": "lib/Truncate.CommonJS.js",
   "module": "lib/Truncate.js",
@@ -14,7 +14,7 @@
     "prepublish": "rm -rf ./lib && npm run compile",
     "preversion": "npm run test",
     "report-coverage": "npm run coverage | coveralls",
-    "test": "BABEL_ENV=test mocha --compilers js:babel-core/register --require babel-polyfill",
+    "test": "BABEL_ENV=test mocha --require babel-polyfill --require babel-core/register",
     "travis": "npm run lint && npm run compile && npm run test"
   },
   "repository": {
