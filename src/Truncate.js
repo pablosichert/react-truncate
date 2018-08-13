@@ -129,7 +129,10 @@ export default class Truncate extends Component {
                 target
             },
             calcTargetWidth,
-            canvasContext
+            canvasContext,
+            props: {
+                width
+            }
         } = this;
 
         // Calculation is no longer relevant, since node has been removed
@@ -137,9 +140,10 @@ export default class Truncate extends Component {
             return;
         }
 
-        // Floor the result to deal with browser subpixel precision
-        const targetWidth = Math.floor(
-            target.parentNode.getBoundingClientRect().width
+        const targetWidth = (
+            width ||
+            // Floor the result to deal with browser subpixel precision
+            Math.floor(target.parentNode.getBoundingClientRect().width)
         );
 
         // Delay calculation until parent node is inserted to the document
