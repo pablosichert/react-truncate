@@ -46,17 +46,19 @@ Hint: (Generally with React) if you want to preserve newlines from plain text, y
 ## API
 | Prop | Type | Default | Description | Example |
 | ---- | ---- | ------- | ----------- | ------- |
-| lines | integer, boolean {false} | 1 | Specifies how many lines of text should be preserved until it gets truncated. `false` and any integer < 1 will result in the text not getting clipped at all. | (`false`, `-1`, `0`), `1`, ...  |
-| ellipsis | string, React node | '…' | An ellipsis that is added to the end of the text in case it is truncated. | `'...'`, `<span>...</span>`, `<span>... <a href='#' onClick={someHandler}>Read more</a></span>`, `[<span key='some'>Some</span>, <span key='siblings'>siblings<span>]`
+| lines | integer, boolean {false} | `1` | Specifies how many lines of text should be preserved until it gets truncated. `false` and any integer < 1 will result in the text not getting clipped at all. | (`false`, `-1`, `0`), `1`, ...  |
+| ellipsis | string, React node | `'…'` | An ellipsis that is added to the end of the text in case it is truncated. | `'...'`, `<span>...</span>`, `<span>... <a href='#' onClick={someHandler}>Read more</a></span>`, `[<span key='some'>Some</span>, <span key='siblings'>siblings<span>]`
 | children | string, React node | | The text to be truncated. Anything that can be evaluated as text. | `'Some text'`, `<p>Some paragraph <a/>with other text-based inline elements<a></p>`, `<span>Some</span><span>siblings</span>` |
+| trimWhitespace | boolean | `false` | If `true`, whitespace will be removed from before the ellipsis (e.g. `words ...` will become `words...` instead) | `<Truncate trimWhitespace>{longText}</Truncate>` |
+| width | number | `0` | If not `0`, the calculation of the content will be based on this number. | `<Truncate trimWhitespace>{longText}</Truncate>` |
 | onTruncate | function | | Gets invoked on each render. Gets called with `true` when text got truncated and ellipsis was injected, and with `false` otherwise. | `isTruncated => isTruncated !== this.state.isTruncated && this.setState({ isTruncated })` |
-| trimWhitespace | boolean | false | If `true`, whitespace will be removed from before the ellipsis (e.g. `words ...` will become `words...` instead) | `<Truncate trimWhitespace>{longText}</Truncate>` |
 
 ## Known issues
-- Text exceeding horizontal boundaries when "viewport" meta tag is not set accordingly for mobile devices (font boosting leads to wrong calculations). See [issue](https://github.com/One-com/react-truncate/issues/4#issuecomment-226703499)
-- Output in plain text only - no support for markup/HTML. See [issue](https://github.com/One-com/react-truncate/issues/8)
-- Wrong line breaks when custom font is loading after the component has rendered. See [issue](https://github.com/One-com/react-truncate/issues/16)
-- No support for letter spacing / word spacing. See [issue](https://github.com/One-com/react-truncate/issues/59)
+- Resize content when the **size** of **parent container changed** (use the `width` property or call `ref.onResize()`). See [issue](https://github.com/One-com/react-truncate/issues/49)
+- Text exceeding horizontal boundaries when "viewport" meta tag is not set accordingly for **mobile** devices (font boosting leads to **wrong calculations**). See [issue](https://github.com/One-com/react-truncate/issues/4#issuecomment-226703499)
+- Output in plain text only - no support for **markup/HTML**. See [issue](https://github.com/One-com/react-truncate/issues/8)
+- Wrong line breaks when **custom font** is loading after the component has rendered. See [issue](https://github.com/One-com/react-truncate/issues/16)
+- No support for **letter spacing** / **word spacing**. See [issue](https://github.com/One-com/react-truncate/issues/59)
 
 ## Integrated example for toggling "read more" text
 ```js

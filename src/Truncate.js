@@ -10,6 +10,7 @@ export default class Truncate extends Component {
             PropTypes.number
         ]),
         trimWhitespace: PropTypes.bool,
+        width: PropTypes.number,
         onTruncate: PropTypes.func
     };
 
@@ -17,7 +18,8 @@ export default class Truncate extends Component {
         children: '',
         ellipsis: '…',
         lines: 1,
-        trimWhitespace: false
+        trimWhitespace: false,
+        width: 0
     };
 
     state = {};
@@ -61,6 +63,11 @@ export default class Truncate extends Component {
         // Render was based on outdated refs and needs to be rerun
         if (this.props.children !== prevProps.children) {
             this.forceUpdate();
+        }
+
+        // If the width prop has changed, recalculate size of contents
+        if (this.props.width !== prevProps.width) {
+            this.calcTargetWidth();
         }
     }
 
@@ -122,7 +129,10 @@ export default class Truncate extends Component {
                 target
             },
             calcTargetWidth,
-            canvasContext
+            canvasContext,
+            props: {
+                width
+            }
         } = this;
 
         // Calculation is no longer relevant, since node has been removed
@@ -130,9 +140,10 @@ export default class Truncate extends Component {
             return;
         }
 
-        // Floor the result to deal with browser subpixel precision
-        const targetWidth = Math.floor(
-            target.parentNode.getBoundingClientRect().width
+        const targetWidth = (
+            width ||
+            // Floor the result to deal with browser subpixel precision
+            Math.floor(target.parentNode.getBoundingClientRect().width)
         );
 
         // Delay calculation until parent node is inserted to the document
