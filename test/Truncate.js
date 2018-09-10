@@ -497,6 +497,45 @@ describe('<Truncate />', () => {
             }
         });
 
+        describe('font', () => {
+            it('should use the native canvas font when no overrides are provided', () => {
+                const component = renderIntoDocument(
+                    <Truncate>
+                        abc
+                    </Truncate>
+                );
+
+                expect(component.canvasContext.font, 'to be', 'normal normal 10px sans-serif');
+            });
+
+            it('should use a single override when one is provided', () => {
+                const component = renderIntoDocument(
+                    <Truncate font={{ size: '7px' }}>
+                        abc
+                    </Truncate>
+                );
+
+                expect(component.canvasContext.font, 'to be', 'normal normal 7px sans-serif');
+            });
+
+            it('should completely override font when all overrides are provided', () => {
+                const component = renderIntoDocument(
+                    <Truncate
+                        font={{
+                            family: 'Lato',
+                            size: '7px',
+                            style: 'italic',
+                            weight: '300'
+                        }}
+                    >
+                        abc
+                    </Truncate>
+                );
+
+                expect(component.canvasContext.font, 'to be', '300 italic 7px Lato');
+            });
+        });
+
         describe('innerText', () => {
             describe('browser implements \\n for <br/>', () => {
                 it('should have newlines only at <br/>', () => {

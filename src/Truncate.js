@@ -9,7 +9,7 @@ export default class Truncate extends Component {
             PropTypes.oneOf([false]),
             PropTypes.number
         ]),
-        fontOverrides: PropTypes.object,
+        font: PropTypes.object,
         trimWhitespace: PropTypes.bool,
         width: PropTypes.number,
         onTruncate: PropTypes.func
@@ -19,7 +19,7 @@ export default class Truncate extends Component {
         children: '',
         ellipsis: '…',
         lines: 1,
-        fontOverrides: {},
+        font: {},
         trimWhitespace: false,
         width: 0
     };
@@ -157,10 +157,10 @@ export default class Truncate extends Component {
         const style = window.getComputedStyle(target);
 
         const font = [
-            this.props.fontOverrides.fontWeight || style['font-weight'],
-            this.props.fontOverrides.fontStyle || style['font-style'],
-            this.props.fontOverrides.fontSize || style['font-size'],
-            this.props.fontOverrides.fontFamily || style['font-family']
+            this.props.font.weight || style['font-weight'],
+            this.props.font.style || style['font-style'],
+            this.props.font.size || style['font-size'],
+            this.props.font.family || style['font-family']
         ].join(' ');
 
         canvasContext.font = font;
@@ -347,7 +347,7 @@ export default class Truncate extends Component {
             }
         }
 
-        delete spanProps.fontOverrides;
+        delete spanProps.font;
         delete spanProps.onTruncate;
         delete spanProps.trimWhitespace;
 
