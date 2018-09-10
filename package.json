@@ -8,13 +8,13 @@
     "lib"
   ],
   "scripts": {
-    "compile": "shx mkdir -p lib && babel ./src --out-file ./lib/Truncate.js && BABEL_ENV=CommonJS babel ./src --out-file ./lib/Truncate.CommonJS.js",
+    "compile": "shx mkdir -p lib && babel ./src --out-file ./lib/Truncate.js && cross-env BABEL_ENV=CommonJS babel ./src --out-file ./lib/Truncate.CommonJS.js",
     "coverage": "nyc npm test && nyc report --reporter=text-lcov",
     "lint": "eslint .",
     "prepublish": "shx rm -rf ./lib && npm run compile",
     "preversion": "npm run test",
     "report-coverage": "npm run coverage | coveralls",
-    "test": "BABEL_ENV=test mocha --require babel-polyfill --require babel-core/register",
+    "test": "cross-env BABEL_ENV=test mocha --require babel-polyfill --require babel-core/register",
     "travis": "npm run lint && npm run compile && npm run test"
   },
   "repository": {
@@ -47,6 +47,7 @@
     "canvas": "^1.6.7",
     "common-tags": "^1.4.0",
     "coveralls": "^3.0.0",
+    "cross-env": "^5.2.0",
     "eslint": "^4.8.0",
     "eslint-config-onelint": "^2.0.0",
     "eslint-config-onelint-react": "^2.0.1",
