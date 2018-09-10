@@ -8,10 +8,10 @@
     "lib"
   ],
   "scripts": {
-    "compile": "mkdir lib; babel ./src --out-file ./lib/Truncate.js && BABEL_ENV=CommonJS babel ./src --out-file ./lib/Truncate.CommonJS.js",
+    "compile": "shx mkdir -p lib && babel ./src --out-file ./lib/Truncate.js && BABEL_ENV=CommonJS babel ./src --out-file ./lib/Truncate.CommonJS.js",
     "coverage": "nyc npm test && nyc report --reporter=text-lcov",
     "lint": "eslint .",
-    "prepublish": "rm -rf ./lib && npm run compile",
+    "prepublish": "shx rm -rf ./lib && npm run compile",
     "preversion": "npm run test",
     "report-coverage": "npm run coverage | coveralls",
     "test": "BABEL_ENV=test mocha --require babel-polyfill --require babel-core/register",
@@ -59,6 +59,7 @@
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-test-renderer": "^16.0.0",
+    "shx": "^0.3.2",
     "sinon": "^4.0.1",
     "unexpected": "^10.36.0",
     "unexpected-dom": "^4.0.0",
