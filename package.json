@@ -28,7 +28,7 @@
     "ellipsis",
     "multiline"
   ],
-  "author": "Pablo Sichert <kps@one.com>",
+  "author": "Pablo Sichert <mail@pablosichert.com>",
   "license": "ISC",
   "peerDependencies": {
     "prop-types": "<= 15.x.x",
