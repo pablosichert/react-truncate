@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import arePassiveEventsSupported from 'are-passive-events-supported';
+
 
 export default class Truncate extends Component {
     static propTypes = {
@@ -56,7 +58,8 @@ export default class Truncate extends Component {
             }
         });
 
-        window.addEventListener('resize', onResize);
+        this.resizeOptions = arePassiveEventsSupported() ? { passive: true } : undefined;
+        window.addEventListener('resize', onResize, this.resizeOptions);
     }
 
     componentDidUpdate(prevProps) {
@@ -82,7 +85,8 @@ export default class Truncate extends Component {
 
         ellipsis.parentNode.removeChild(ellipsis);
 
-        window.removeEventListener('resize', onResize);
+        window.removeEventListener('resize', onResize, this.resizeOptions);
+        delete this.resizeOptions;
 
         window.cancelAnimationFrame(timeout);
     }
