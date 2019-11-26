@@ -55,8 +55,6 @@ export default class Truncate extends Component {
                 text.parentNode.removeChild(text);
             }
         });
-
-        window.addEventListener('resize', onResize);
     }
 
     componentDidUpdate(prevProps) {
@@ -83,9 +81,6 @@ export default class Truncate extends Component {
         if (ellipsis) {
             ellipsis.parentNode.removeChild(ellipsis);
         }
-
-        window.removeEventListener('resize', onResize);
-
         window.cancelAnimationFrame(timeout);
     }
 
