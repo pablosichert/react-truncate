@@ -80,7 +80,9 @@ export default class Truncate extends Component {
             timeout
         } = this;
 
-        ellipsis.parentNode.removeChild(ellipsis);
+        if (ellipsis && ellipsis.parentNode) {
+            ellipsis.parentNode.removeChild(ellipsis);
+        }
 
         window.removeEventListener('resize', onResize);
 
