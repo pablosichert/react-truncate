@@ -19,9 +19,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:One-com/react-truncate.git"
+    "url": "git@github.com:pablosichert/react-truncate.git"
   },
-  "homepage": "https://github.com/One-com/react-truncate",
+  "homepage": "https://github.com/pablosichert/react-truncate",
   "keywords": [
     "react",
     "truncate",
