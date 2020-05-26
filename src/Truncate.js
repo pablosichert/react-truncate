@@ -349,6 +349,7 @@ export default class Truncate extends Component {
 
         delete spanProps.onTruncate;
         delete spanProps.trimWhitespace;
+        delete spanProps.width;
 
         return (
             <span {...spanProps} ref={(targetEl) => { this.elements.target = targetEl; }}>
