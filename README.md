@@ -6,14 +6,6 @@
 [![Dependency status][david-dm-image]][david-dm-url]
 [![Dev dependency status][david-dm-dev-image]][david-dm-dev-url]
 
-## Sponsorship
-
-Thanks to our sponsors for supporting the maintenance of this package! You can check out their product below:
-
-<a href="https://tracking.gitads.io/?repo=react-truncate">
-    <img src="https://images.gitads.io/react-truncate" alt="Sponsorship banner via GitAds"/>
-</a>
-
 ## Install
 ```
 $ npm install react-truncate
