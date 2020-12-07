@@ -118,6 +118,7 @@ export default class Truncate extends Component {
             onTruncate
         } = this.props;
 
+        window.cancelAnimationFrame(this.timeout);
         if (typeof onTruncate === 'function') {
             this.timeout = window.requestAnimationFrame(() => {
                 onTruncate(didTruncate);
