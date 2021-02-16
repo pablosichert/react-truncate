@@ -171,6 +171,12 @@ export default class Truncate extends Component {
     }
 
     measureWidth(text) {
+        const newCanvas = document.createElement('canvas')
+        const newCanvasTemplate = newCanvas.getContext('2d')
+        if(this.canvasContext.font){
+            newCanvasTemplate.font = this.canvasContext.font
+            return newCanvasTemplate.measureText(text).width
+        }
         return this.canvasContext.measureText(text).width;
     }
 
