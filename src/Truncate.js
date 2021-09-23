@@ -157,8 +157,8 @@ export default class Truncate extends Component {
         const style = window.getComputedStyle(target);
 
         const font = [
-            style['font-weight'],
             style['font-style'],
+            style['font-weight'],
             style['font-size'],
             style['font-family']
         ].join(' ');
