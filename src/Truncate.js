@@ -39,22 +39,11 @@ export default class Truncate extends Component {
 
     componentDidMount() {
         const {
-            elements: {
-                text
-            },
-            calcTargetWidth,
             onResize
         } = this;
 
         const canvas = document.createElement('canvas');
         this.canvasContext = canvas.getContext('2d');
-
-        calcTargetWidth(() => {
-            // Node not needed in document tree to read its content
-            if (text) {
-                text.parentNode.removeChild(text);
-            }
-        });
 
         window.addEventListener('resize', onResize);
     }
