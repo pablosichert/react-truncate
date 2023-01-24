@@ -1,7 +1,7 @@
 {
   "name": "react-truncate",
-  "version": "2.4.0",
-  "description": "React component for truncating multi-line spans and adding an ellipsis",
+  "version": "2.4.1",
+  "description": "Forked from main repository to fix compatibility issues with React 17/18",
   "main": "lib/Truncate.CommonJS.js",
   "module": "lib/Truncate.js",
   "files": [
@@ -21,7 +21,7 @@
     "type": "git",
     "url": "git@github.com:frankmolenaar1986/react-truncate-react-18.git"
   },
-  "homepage": "https://github.com/pablosichert/react-truncate",
+  "homepage": "https://github.com/frankmolenaar1986/react-truncate-react-18/",
   "keywords": [
     "react",
     "truncate",
