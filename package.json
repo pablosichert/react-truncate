@@ -19,7 +19,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:pablosichert/react-truncate.git"
+    "url": "git@github.com:frankmolenaar1986/react-truncate-react-18.git"
   },
   "homepage": "https://github.com/pablosichert/react-truncate",
   "keywords": [
@@ -28,11 +28,10 @@
     "ellipsis",
     "multiline"
   ],
-  "author": "Pablo Sichert <mail@pablosichert.com>",
+  "author": "Frank Molenaar <frankmolenaarma@gmail.com>",
   "license": "ISC",
   "peerDependencies": {
-    "prop-types": "<= 15.x.x",
-    "react": "<= 17.x.x"
+    "prop-types": "<= 15.x.x"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
